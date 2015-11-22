@@ -1,0 +1,19 @@
+﻿{
+    "authors": [ "Drake103" ],
+    "description": "Wrc.Domain Class Library",
+    "dependencies": {
+        "FluentNHibernate": "2.0.3",
+        "Newtonsoft.Json": "8.0.1-beta3"
+    },
+    "frameworks": {
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.Data": "4.0.0.0"
+            }
+        }
+    },
+    "licenseUrl": "",
+    "projectUrl": "",
+    "tags": [ "" ],
+    "version": "1.0.0-*"
+}
