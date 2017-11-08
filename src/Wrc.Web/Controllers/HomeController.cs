@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Wrc.Web.Controllers
 {
@@ -10,6 +11,12 @@ namespace Wrc.Web.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult Error()
+        {
+            ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View();
         }
     }
