@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wrc.Web.Dal;
+using Wrc.Web.Domain;
+using Wrc.Web.Services.Replays;
+using Wrc.Web.Services.ReplayParsing;
+using Wrc.Web.Dal.Repositories;
 
 namespace Wrc.Web
 {
@@ -23,6 +28,12 @@ namespace Wrc.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddScoped<IUnitOfWorkFactory, WrcContextFactory>();
+            services.AddScoped<IReplayService, ReplayService>();
+            services.AddScoped<IReplayParser, ReplayParser>();
+            services.AddScoped<IReplayMapper, ReplayMapper>();
+            services.AddScoped<IPlayerUserRepository, PlayerUserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

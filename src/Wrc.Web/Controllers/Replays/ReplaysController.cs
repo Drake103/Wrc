@@ -10,24 +10,23 @@ using Wrc.Web.Domain.Replays;
 using Wrc.Web.Dtos;
 using Wrc.Web.Models;
 using Wrc.Web.Services.Replays;
+using System.Collections.Generic;
+using Wrc.Web.Dtos.Replays;
 
 namespace Wrc.Web.Controllers.Replays
 {
     [Route("api/replays")]
     public class ReplaysController : Controller
     {
-        private readonly IReplayRepository _replayRepository;
         private readonly IReplayService _replayService;
         private readonly IUnitOfWorkFactory _uowFactory;
 
         public ReplaysController(
             IUnitOfWorkFactory uowFactory,
-            IReplayService replayService,
-            IReplayRepository replayRepository)
+            IReplayService replayService)
         {
             _uowFactory = uowFactory;
             _replayService = replayService;
-            _replayRepository = replayRepository;
         }
 
         //
@@ -47,9 +46,10 @@ namespace Wrc.Web.Controllers.Replays
         }
 
         [HttpGet]
-        [Route("/")]
+        [Route("/replays/list")]
         public async Task<ReplayListModel> ListAsync(int startIndex, int pageSize, string searchText)
         {
+            return new ReplayListModel(new List<ReplayRowDto>());
             var pagingInfo = new PagingInfo(startIndex, pageSize);
 
             using (var uow = _uowFactory.Create())
