@@ -18,6 +18,7 @@
               <e p="Home.tsx" t="Include" />
               <e p="Layout.tsx" t="Include" />
               <e p="NavMenu.tsx" t="Include" />
+              <e p="Replays.tsx" t="Include" />
             </e>
             <e p="configureStore.ts" t="Include" />
             <e p="css" t="Include">
@@ -26,7 +27,6 @@
             <e p="dist" t="Include">
               <e p="89889688147bd7575d6327160d64e760.svg" t="Include" />
               <e p="main-server.js" t="Include" />
-              <e p="vendor-manifest.json" t="Include" />
               <e p="vendor.js" t="Include" />
             </e>
             <e p="old" t="Include">
@@ -244,6 +244,7 @@
             <e p="_ViewStart.cshtml" t="Include" />
             <e p="Home" t="Include">
               <e p="Index.cshtml" t="Include" />
+              <e p="Replays.cshtml" t="Include" />
             </e>
             <e p="Shared" t="Include">
               <e p="_Layout.cshtml" t="Include" />

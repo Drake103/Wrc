@@ -1,17 +1,12 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net.Mime;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Wrc.Web.Domain;
-using Wrc.Web.Domain.Replays;
 using Wrc.Web.Dtos;
+using Wrc.Web.Dtos.Replays;
 using Wrc.Web.Models;
 using Wrc.Web.Services.Replays;
-using System.Collections.Generic;
-using Wrc.Web.Dtos.Replays;
 
 namespace Wrc.Web.Controllers.Replays
 {
@@ -49,7 +44,6 @@ namespace Wrc.Web.Controllers.Replays
         [Route("/replays/list")]
         public async Task<ReplayListModel> ListAsync(int startIndex, int pageSize, string searchText)
         {
-            return new ReplayListModel(new List<ReplayRowDto>());
             var pagingInfo = new PagingInfo(startIndex, pageSize);
 
             using (var uow = _uowFactory.Create())

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,12 +23,11 @@ namespace Wrc.Web.Dal.Replays
 
         public Task<IReadOnlyList<ReplayRowDto>> ListAsync(PagingInfo pagingInfo, string searchText)
         {
-            throw new NotImplementedException();
-            /*var query = _crud.Get();
+            var query = _ctx.Replays;
 
-            query = FilterBySearchText(query, searchText).OrderByDescending(x => x.UploadDate);
+            var orderedQuery = FilterBySearchText(query, searchText).OrderByDescending(x => x.UploadDate);
 
-            return Fetch(query, pagingInfo);*/
+            return FetchAsync(orderedQuery, pagingInfo);
         }
 
         public IReadOnlyList<ReplayRowDto> GetByPlayerUser(int playerUserId, PagingInfo pagingInfo)
@@ -157,5 +157,25 @@ namespace Wrc.Web.Dal.Replays
 
             return dtoQuery.Skip(pagingInfo.StartIndex).Take(pagingInfo.PageSize).ToList();
         }
+
+        private static async Task<IReadOnlyList<ReplayRowDto>> FetchAsync(IQueryable<Replay> query, PagingInfo pagingInfo)
+        {
+            var dtoQuery = query.Select(x => new ReplayRowDto
+            {
+                Id = x.Id,
+                UploadDate = x.UploadDate,
+                PlayersCount = x.Players.Count(),
+                MapName = x.GameMap.Name,
+                Title = x.Title,
+                VictoryConditionName = x.VictoryCondition.Name,
+                GameVersion = x.Version
+            });
+
+            if (pagingInfo == PagingInfo.All)
+                return await dtoQuery.ToListAsync();
+
+            return await dtoQuery.Skip(pagingInfo.StartIndex).Take(pagingInfo.PageSize).ToListAsync();
+        }
+
     }
 }

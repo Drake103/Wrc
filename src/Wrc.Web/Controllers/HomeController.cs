@@ -15,5 +15,10 @@ namespace Wrc.Web.Controllers
             ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View();
         }
+
+        public IActionResult Replays()
+        {
+            return View();
+        }
     }
 }
