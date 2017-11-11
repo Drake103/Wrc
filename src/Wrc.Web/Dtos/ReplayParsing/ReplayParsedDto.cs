@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Wrc.Domain.Dtos.ReplayParsing
+namespace Wrc.Web.Dtos.ReplayParsing
 {
-    public class ReplayParsedDto : BaseDto
+    [Serializable]
+    public class ReplayParsedDto
     {
         public ReplayParsedDto()
         {
             Players = new List<PlayerParsedDto>();
         }
+
+        public int Id { get; set; }
 
         public int IsNetworkMode { get; set; }
         public string Version { get; set; }

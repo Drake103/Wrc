@@ -1,7 +1,12 @@
-﻿namespace Wrc.Domain.Dtos.ReplayParsing
+﻿using System;
+
+namespace Wrc.Web.Dtos.ReplayParsing
 {
-    public class PlayerParsedDto : BaseDto
+    [Serializable]
+    public class PlayerParsedDto
     {
+        public int Id { get; set; }
+
         public int PlayerEugenId
         {
             get

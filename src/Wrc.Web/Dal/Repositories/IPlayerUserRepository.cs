@@ -1,8 +1,8 @@
-﻿using Wrc.Domain.Models.Replays;
+﻿using Wrc.Web.Domain.Replays;
 
-namespace Wrc.Domain.Dal.Repositories
+namespace Wrc.Web.Dal.Repositories
 {
-    public interface IPlayerUserRepository : IGenericRepository<PlayerUser>
+    public interface IPlayerUserRepository
     {
         PlayerUser GetPlayerUserByEugenUserId(int eugenUserId);
     }

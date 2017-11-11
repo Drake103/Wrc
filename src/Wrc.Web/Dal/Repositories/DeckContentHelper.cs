@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Wrc.Domain.Dtos.Replays;
 
-namespace Wrc.Domain.Dal.Repositories
+namespace Wrc.Web.Dal.Repositories
 {
     internal class DeckContentHelper
     {
@@ -18,7 +18,7 @@ namespace Wrc.Domain.Dal.Repositories
             NameCodePair specInfo;
 
             GetNationAndSpecInfo(deckContent[0], deckContent[1], out nationInfo, out specInfo);
-            
+
             var deckInfo = new DeckInfoDto
             {
                 NationName = nationInfo.Name,
@@ -103,14 +103,15 @@ namespace Wrc.Domain.Dal.Repositories
             char specChar,
             out NameCodePair nationInfo,
             out NameCodePair specInfo
-            )
+        )
         {
             nationInfo = new NameCodePair();
             specInfo = new NameCodePair();
 
-            var coalitionCodes = new[] { 'W', 'X', 's', 't' };
+            var coalitionCodes = new[] {'W', 'X', 's', 't'};
 
-            if (!coalitionCodes.Contains(nationChar)){
+            if (!coalitionCodes.Contains(nationChar))
+            {
                 nationInfo = GetNationInfo(nationChar);
 
                 var specIndex = specChar - 'I';
@@ -201,7 +202,6 @@ namespace Wrc.Domain.Dal.Repositories
             }
 
             if (nationChar == 't')
-            {
                 if (GetIndex(specChar) >= GetIndex('I') && GetIndex(specChar) <= GetIndex('P'))
                 {
                     nationInfo = new NameCodePair("Redfor", "redfor");
@@ -209,7 +209,6 @@ namespace Wrc.Domain.Dal.Repositories
                     specInfo = GetSpecInfo(specIndex);
                     return true;
                 }
-            }
 
             return false;
         }
@@ -218,7 +217,6 @@ namespace Wrc.Domain.Dal.Repositories
         {
             public NameCodePair()
             {
-                
             }
 
             public NameCodePair(string name, string code)
@@ -227,8 +225,8 @@ namespace Wrc.Domain.Dal.Repositories
                 Code = code;
             }
 
-            public string Name { get; set; }
-            public string Code { get; set; }
+            public string Name { get; }
+            public string Code { get; }
         }
     }
 }

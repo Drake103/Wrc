@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using Wrc.Domain.Dal.Repositories;
-using Wrc.Domain.Dtos.ReplayParsing;
-using Wrc.Domain.Models.Replays;
-using Wrc.Domain.Models.Replays.Dictionaries;
-using Wrc.Domain.Services.ReplayParsing;
+using Wrc.Web.Dal.Repositories;
+using Wrc.Web.Domain.Replays;
+using Wrc.Web.Domain.Replays.Dictionaries;
+using Wrc.Web.Dtos.ReplayParsing;
 
-namespace Wrc.Domain.Services.ReplayParsing
+namespace Wrc.Web.Services.ReplayParsing
 {
     public class ReplayMapper : IReplayMapper
     {
-        private readonly IGenericDictionaryItemRepository<GameMode> _gameModeRepository;
-        private readonly IGenericDictionaryItemRepository<GameMap> _gameMapRepository;
-        private readonly IGenericDictionaryItemRepository<GameType> _gameTypeRepository;
-        private readonly IGenericDictionaryItemRepository<VictoryCondition> _victoryConditionRepository;
         private readonly IPlayerUserRepository _playerUserRepository;
 
         public ReplayMapper(
-            IGenericDictionaryItemRepository<GameMode> gameModeRepository,
-            IGenericDictionaryItemRepository<GameMap> gameMapRepository,
-            IGenericDictionaryItemRepository<GameType> gameTypeRepository,
-            IGenericDictionaryItemRepository<VictoryCondition> victoryConditionRepository,
             IPlayerUserRepository playerUserRepository)
         {
-            _gameModeRepository = gameModeRepository;
-            _gameMapRepository = gameMapRepository;
-            _gameTypeRepository = gameTypeRepository;
-            _victoryConditionRepository = victoryConditionRepository;
             _playerUserRepository = playerUserRepository;
         }
 
         public Replay GetEntity(ReplayParsedDto replayParsedDto)
         {
-            var replay = new Replay
+            throw new NotImplementedException();
+            /*var replay = new Replay
             {
                 IsNetworkMode = Convert.ToBoolean(replayParsedDto.IsNetworkMode),
                 Version = replayParsedDto.Version,
@@ -95,11 +83,13 @@ namespace Wrc.Domain.Services.ReplayParsing
                 replay.Players.Add(player);
             }
 
-            return replay;
+            return replay;*/
         }
 
         private Player GetPlayer(PlayerParsedDto playerParsedDto)
         {
+            throw new NotImplementedException();
+            /*
             var player = new Player
             {
                 PlayerElo = playerParsedDto.PlayerElo,
@@ -133,7 +123,7 @@ namespace Wrc.Domain.Services.ReplayParsing
 
             player.PlayerUser = playerUser;
 
-            return player;
+            return player;*/
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using Wrc.Domain.Dtos.ReplayParsing;
+using Wrc.Web.Dtos.ReplayParsing;
 
-namespace Wrc.Domain.Services.ReplayParsing
+namespace Wrc.Web.Services.ReplayParsing
 {
     public interface IReplayParser
     {

@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
-using Wrc.Domain.Dtos.ReplayParsing;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Wrc.Web.Dtos.ReplayParsing;
 
-namespace Wrc.Domain.Services.ReplayParsing
+namespace Wrc.Web.Services.ReplayParsing
 {
     public class ReplayParser : IReplayParser
     {

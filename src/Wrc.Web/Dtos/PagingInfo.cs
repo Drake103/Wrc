@@ -1,16 +1,16 @@
-﻿namespace Wrc.Domain.Dtos
+﻿namespace Wrc.Web.Dtos
 {
     public class PagingInfo
     {
+        public const PagingInfo All = null;
+
         public PagingInfo(int startIndex, int pageSize)
         {
             PageSize = pageSize;
             StartIndex = startIndex;
         }
 
-        public const PagingInfo All = null;
-
-        public int StartIndex { get; set; }
-        public int PageSize { get; set; }
+        public int StartIndex { get; }
+        public int PageSize { get; }
     }
 }

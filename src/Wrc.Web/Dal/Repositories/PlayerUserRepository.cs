@@ -1,17 +1,14 @@
-﻿using System.Linq;
-using Wrc.Domain.Models.Replays;
+﻿using System;
+using Wrc.Web.Domain.Replays;
 
-namespace Wrc.Domain.Dal.Repositories
+namespace Wrc.Web.Dal.Repositories
 {
-    public class PlayerUserRepository : GenericRepository<PlayerUser>, IPlayerUserRepository
+    public class PlayerUserRepository : IPlayerUserRepository
     {
-        public PlayerUserRepository(ICrudRepository<PlayerUser> crud) : base(crud)
-        {
-        }
-
         public PlayerUser GetPlayerUserByEugenUserId(int eugenUserId)
         {
-            return _crud.Get().SingleOrDefault(x => x.EugenUserId == eugenUserId);
+            throw new NotImplementedException();
+            /*return _crud.Get().SingleOrDefault(x => x.EugenUserId == eugenUserId);*/
         }
     }
 }

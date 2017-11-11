@@ -1,48 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using Wrc.Domain.Dal.Repositories;
-using Wrc.Domain.Dtos;
-using Wrc.Domain.Dtos.Replays;
-using Wrc.Domain.Models.Replays;
-using Wrc.Domain.Services.ReplayParsing;
+using System.Threading.Tasks;
+using Wrc.Web.Domain;
+using Wrc.Web.Domain.Replays;
+using Wrc.Web.Services.ReplayParsing;
 
-namespace Wrc.Domain.Services
+namespace Wrc.Web.Services.Replays
 {
     public class ReplayService : IReplayService
     {
         private readonly IReplayParser _parser;
         private readonly IReplayMapper _mapper;
-        private readonly IReplayRepository _replayRepository;
+        private readonly IUnitOfWorkFactory _uowFactory;
 
         public ReplayService(
             IReplayParser parser,
             IReplayMapper mapper,
-            IReplayRepository replayRepository
-            )
+            IUnitOfWorkFactory uowFactory)
         {
+            _uowFactory = uowFactory;
             _parser = parser;
             _mapper = mapper;
-            _replayRepository = replayRepository;
         }
 
-        public Replay SaveReplay(Stream replayFile, string filePath)
+        public async Task<Replay> SaveReplayAsync(Stream replayFile, string filePath)
         {
-            var hash = ComputeFileHash(replayFile);
+            using (var uow = _uowFactory.Create())
+            {
+                var hash = ComputeFileHash(replayFile);
 
-            var parsedReplayDto = _parser.ParseFile(CopyStream(replayFile));
+                var parsedReplayDto = _parser.ParseFile(CopyStream(replayFile));
 
-            var replay = _mapper.GetEntity(parsedReplayDto);
+                var replay = _mapper.GetEntity(parsedReplayDto);
 
-            replay.Link = filePath;
-            replay.Title = "no title";
-            replay.UploadDate = DateTime.Now;
-            replay.FileHash = hash;
+                replay.Link = filePath;
+                replay.Title = "no title";
+                replay.UploadDate = DateTime.Now;
+                replay.FileHash = hash;
 
-            _replayRepository.Save(replay);
+                uow.ReplayRepository.Add(replay);
 
-            return replay;
+                await uow.SaveChangesAsync();
+
+                return replay;
+            }
         }
 
         private Guid ComputeFileHash(Stream replayFile)
@@ -71,30 +73,11 @@ namespace Wrc.Domain.Services
 
         public bool IsAlreadyUploaded(Stream replayFile, out string title)
         {
-            var hash = ComputeFileHash(replayFile);
-            return _replayRepository.IsAlreadyUploaded(hash, out title);
-        }
-
-        public ReplayCardDto GetReplayCard(int replayId)
-        {
-            var replayCardDto = _replayRepository.GetReplayCard(replayId);
-
-            return replayCardDto;
-        }
-
-        public IList<ReplayDto> GetReplays(PagingInfo pagingInfo, string searchText)
-        {
-            return _replayRepository.GetForList(pagingInfo, searchText);
-        }
-
-        public IList<ReplayDto> GetReplaysByPlayerUser(int playerUserId, PagingInfo pagingInfo)
-        {
-            return _replayRepository.GetByPlayerUser(playerUserId, pagingInfo);
-        }
-
-        public int GetReplaysCount(string searchText)
-        {
-            return _replayRepository.GetTotalCount(searchText);
+            using (var unitOfWork = _uowFactory.Create())
+            {
+                var hash = ComputeFileHash(replayFile);
+                return unitOfWork.ReplayRepository.IsAlreadyUploaded(hash, out title);
+            }
         }
     }
 }

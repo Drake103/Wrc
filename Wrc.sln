@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B27CD652-3B85-466C-9141-1DFAD31CE0AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrc.Web", "src\Wrc.Web\Wrc.Web.csproj", "{00805829-E607-409E-9AD3-71D83471B2C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrc.Web", "src\Wrc.Web\Wrc.Web.csproj", "{00805829-E607-409E-9AD3-71D83471B2C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0E9BA149-D619-4B3E-B9EB-7475DD0B3C83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrc.Web.Tests", "tests\Wrc.Web.Tests\Wrc.Web.Tests.csproj", "{C11EE921-4B2A-4896-A19A-405B57454A3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,17 @@ Global
 		{00805829-E607-409E-9AD3-71D83471B2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00805829-E607-409E-9AD3-71D83471B2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00805829-E607-409E-9AD3-71D83471B2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C11EE921-4B2A-4896-A19A-405B57454A3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C11EE921-4B2A-4896-A19A-405B57454A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C11EE921-4B2A-4896-A19A-405B57454A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C11EE921-4B2A-4896-A19A-405B57454A3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{00805829-E607-409E-9AD3-71D83471B2C4} = {B27CD652-3B85-466C-9141-1DFAD31CE0AC}
+		{C11EE921-4B2A-4896-A19A-405B57454A3C} = {0E9BA149-D619-4B3E-B9EB-7475DD0B3C83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A57461C-BE12-447A-8C73-603C8CA05391}

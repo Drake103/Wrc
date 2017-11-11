@@ -1,7 +1,7 @@
-﻿using Wrc.Domain.Dtos.ReplayParsing;
-using Wrc.Domain.Models.Replays;
+﻿using Wrc.Web.Domain.Replays;
+using Wrc.Web.Dtos.ReplayParsing;
 
-namespace Wrc.Domain.Services.ReplayParsing
+namespace Wrc.Web.Services.ReplayParsing
 {
     public interface IReplayMapper
     {
