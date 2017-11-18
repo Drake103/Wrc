@@ -6,12 +6,14 @@
             int id,
             string title,
             IGameInfo gameInfo,
-            UploadedFile uploadedFile)
+            UploadedFile uploadedFile,
+            int downloadCount)
         {
             Id = id;
             Title = title;
             GameInfo = gameInfo;
             UploadedFile = uploadedFile;
+            DownloadCount = downloadCount;
         }
 
         public int Id { get; }
@@ -22,6 +24,6 @@
 
         public UploadedFile UploadedFile { get; }
 
-        public int DownloadsCounter { get; }
+        public int DownloadCount { get; }
     }
 }

@@ -19,9 +19,9 @@ namespace Wrc.Web.Dal.Replays
                 .SetGameMode(replay.GameModeCode)
                 .SetMap(replay.GameMapCode)
                 .SetMaxPlayers(replay.MaxPlayers)
-                .SetAI(replay.Ai)
+                .SetAI(replay.AI)
                 .SetGameType(replay.GameTypeCode)
-                .SetIsPrivate(replay.Private)
+                .SetIsPrivate(replay.IsPrivate)
                 .SetInitMoney(replay.InitMoney)
                 .SetScoreLimit(replay.ScoreLimit)
                 .SetServerName(replay.ServerName)
@@ -43,7 +43,8 @@ namespace Wrc.Web.Dal.Replays
                 replay.Id,
                 replay.Title,
                 gameInfoBuilder.Build(),
-                new UploadedFile(replay.FileLink, replay.FileHash, replay.UploadedAt));
+                new UploadedFile(replay.FileLink, replay.FileHash, replay.UploadedAt),
+                replay.DownloadCount);
         }
 
         private static PlayerInfo ToPlayerInfo(PlayerRecord player)
@@ -51,21 +52,21 @@ namespace Wrc.Web.Dal.Replays
             return new PlayerInfo(
                 player.Id,
                 new AccountInfo(player.AccountRecord.Id, player.AccountRecord.Name),
-                player.PlayerElo,
-                player.PlayerRank,
-                player.PlayerLevel,
-                player.PlayerName,
-                player.PlayerTeamName,
-                player.PlayerAvatar,
-                player.PlayerIALevel,
-                player.PlayerReady,
-                player.PlayerDeckName,
-                player.PlayerDeckContent,
-                player.PlayerAlliance,
-                player.PlayerIsEnteredInLobby,
-                player.PlayerScoreLimit,
-                player.PlayerIncomeRate,
-                player.PlayerNumber);
+                player.Elo,
+                player.Rank,
+                player.Level,
+                player.Name,
+                player.TeamName,
+                player.Avatar,
+                player.IALevel,
+                player.WasReady,
+                player.DeckName,
+                player.DeckContent,
+                player.Alliance,
+                player.IsEnteredInLobby,
+                player.ScoreLimit,
+                player.IncomeRate,
+                player.Number);
         }
     }
 }

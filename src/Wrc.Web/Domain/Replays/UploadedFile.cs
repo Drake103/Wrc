@@ -7,17 +7,17 @@ namespace Wrc.Web.Domain.Replays
         public UploadedFile(
             string downloadLink,
             string fileHash,
-            DateTime uploadDate)
+            DateTime uploadedAt)
         {
             DownloadLink = downloadLink;
             FileHash = fileHash;
-            UploadDate = uploadDate;
+            UploadedAt = uploadedAt;
         }
 
         public string DownloadLink { get; }
 
         public string FileHash { get; }
 
-        public DateTime UploadDate { get; }
+        public DateTime UploadedAt { get; }
     }
 }

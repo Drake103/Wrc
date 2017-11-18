@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -32,14 +31,18 @@ namespace Wrc.Web.Dal.Replays
 
             query = query.Skip(pagingInfo.Start).Take(pagingInfo.Limit);
 
-            var lightReplayProjections = await ToLightReplayProjection(query).ToListAsync().ConfigureAwait(false);
+            var lightReplayProjections = await ToLightReplayProjection(query)
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             return lightReplayProjections
                 .Select(_lightReplayProjectionToLightReplayTransformer.ToLightReplay)
                 .ToList();
         }
 
-        public async Task<IReadOnlyList<LightReplay>> GetByAccountAsync(int accountId, PagingInfo pagingInfo)
+        public async Task<IReadOnlyList<LightReplay>> GetByAccountAsync(
+            int accountId,
+            PagingInfo pagingInfo)
         {
             IQueryable<ReplayRecord> query = _wrcContext.Replays;
 
@@ -52,7 +55,9 @@ namespace Wrc.Web.Dal.Replays
 
             query = query.Skip(pagingInfo.Start).Take(pagingInfo.Limit);
 
-            var lightReplayProjections = await ToLightReplayProjection(query).ToListAsync().ConfigureAwait(false);
+            var lightReplayProjections = await ToLightReplayProjection(query)
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             return lightReplayProjections
                 .Select(_lightReplayProjectionToLightReplayTransformer.ToLightReplay)
@@ -61,12 +66,16 @@ namespace Wrc.Web.Dal.Replays
 
         public async Task<Replay> GetReplayAsync(int replayId)
         {
-            var replay = await _wrcContext.FindAsync<ReplayRecord>(replayId);
+            var replay = await _wrcContext.FindAsync<ReplayRecord>(replayId).ConfigureAwait(false);
             if (replay == null)
+            {
                 return null;
+            }
 
             foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
-                await navigationEntry.LoadAsync();
+            {
+                await navigationEntry.LoadAsync().ConfigureAwait(false);
+            }
 
             return _replayRecordToReplayTransformer.ToReplay(replay);
         }
@@ -79,23 +88,42 @@ namespace Wrc.Web.Dal.Replays
 
         public async Task<Replay> GetByFileHashAsync(string fileHash)
         {
-            var replay = await _wrcContext.Replays.FirstOrDefaultAsync(x => x.FileHash == fileHash);
+            var replay = await _wrcContext.Replays.FirstOrDefaultAsync(x => x.FileHash == fileHash)
+                .ConfigureAwait(false);
 
             if (replay == null)
+            {
                 return null;
+            }
 
             foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
-                await navigationEntry.LoadAsync();
+            {
+                await navigationEntry.LoadAsync().ConfigureAwait(false);
+            }
 
             return _replayRecordToReplayTransformer.ToReplay(replay);
         }
 
-        public void Add(Replay replayRecord)
+        public async Task AddAsync(Replay replay)
         {
-            throw new NotImplementedException();
+            var replayRecord = await new ReplayToReplayRecordTransformer(_wrcContext)
+                .ToReplayRecordAsync(replay)
+                .ConfigureAwait(false);
+
+            _wrcContext.Add(replayRecord);
         }
 
-        private static IQueryable<LightReplayProjection> ToLightReplayProjection(IQueryable<ReplayRecord> query)
+        public async Task IncrementDownloadCountAsync(int replayId)
+        {
+            var replayRecord = await _wrcContext.Replays.FindAsync(replayId);
+            if (replayRecord!=null)
+            {
+                replayRecord.DownloadCount++;
+            }
+        }
+
+        private static IQueryable<LightReplayProjection> ToLightReplayProjection(
+            IQueryable<ReplayRecord> query)
         {
             return query.Select(
                 r => new LightReplayProjection
@@ -113,7 +141,9 @@ namespace Wrc.Web.Dal.Replays
         private static IQueryable<ReplayRecord> FilterBySearchText(IQueryable<ReplayRecord> query, string searchText)
         {
             if (string.IsNullOrWhiteSpace(searchText))
+            {
                 return query;
+            }
 
             searchText = searchText.ToLowerInvariant();
 

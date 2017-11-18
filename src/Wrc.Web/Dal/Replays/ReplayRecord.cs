@@ -13,9 +13,9 @@ namespace Wrc.Web.Dal.Replays
         public string GameModeCode { get; set; }
         public string GameMapCode { get; set; }
         public int MaxPlayers { get; set; }
-        public bool Ai { get; set; }
+        public bool AI { get; set; }
         public string GameTypeCode { get; set; }
-        public bool Private { get; set; }
+        public bool IsPrivate { get; set; }
         public int InitMoney { get; set; }
         public int ScoreLimit { get; set; }
         public string ServerName { get; set; }
@@ -31,7 +31,7 @@ namespace Wrc.Web.Dal.Replays
         public string FileLink { get; set; }
         public string FileHash { get; set; }
 
-        public int DownloadsCounter { get; set; }
+        public int DownloadCount { get; set; }
 
         public IList<PlayerRecord> Players { get; set; } = new List<PlayerRecord>();
         public int PlayersCount { get; set; }

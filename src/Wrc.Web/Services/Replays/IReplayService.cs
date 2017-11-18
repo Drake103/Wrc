@@ -7,6 +7,6 @@ namespace Wrc.Web.Services.Replays
     public interface IReplayService
     {
         Task<Replay> SaveReplayAsync(Stream replayFile, string filePath);
-        Task<Replay> IsAlreadyUploadedAsync(Stream replayFile);
+        Task<Replay> GetByFileHashAsync(Stream replayFile);
     }
 }

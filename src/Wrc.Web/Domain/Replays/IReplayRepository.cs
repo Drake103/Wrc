@@ -12,6 +12,8 @@ namespace Wrc.Web.Domain.Replays
         Task<int> GetTotalCountAsync(string searchText);
         Task<Replay> GetByFileHashAsync(string fileHash);
 
-        void Add(Replay replayRecord);
+        Task AddAsync(Replay replay);
+
+        Task IncrementDownloadCountAsync(int replayId);
     }
 }

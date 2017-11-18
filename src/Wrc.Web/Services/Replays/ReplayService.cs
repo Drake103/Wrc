@@ -42,9 +42,10 @@ namespace Wrc.Web.Services.Replays
                     0,
                     "No Title",
                     gameInfo,
-                    new UploadedFile(filePath, hash, _timeService.UtcNow));
+                    new UploadedFile(filePath, hash, _timeService.UtcNow),
+                    0);
 
-                unitOfWork.ReplayRepository.Add(replay);
+                await unitOfWork.ReplayRepository.AddAsync(replay);
 
                 await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
@@ -52,7 +53,7 @@ namespace Wrc.Web.Services.Replays
             }
         }
 
-        public async Task<Replay> IsAlreadyUploadedAsync(Stream replayFile)
+        public async Task<Replay> GetByFileHashAsync(Stream replayFile)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {

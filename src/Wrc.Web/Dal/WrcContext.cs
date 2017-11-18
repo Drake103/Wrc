@@ -23,7 +23,7 @@ namespace Wrc.Web.Dal
 
         public DbSet<ReplayRecord> Replays { get; set; }
 
-        public DbSet<AccountRecord> PlayerUsers { get; set; }
+        public DbSet<AccountRecord> Accounts { get; set; }
 
         public IReplayRepository ReplayRepository => _lazyReplayRepository.Value;
 
