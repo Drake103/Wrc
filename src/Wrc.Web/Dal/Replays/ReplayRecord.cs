@@ -28,12 +28,11 @@ namespace Wrc.Web.Dal.Replays
         public string Seed { get; set; }
 
         public DateTime UploadedAt { get; set; }
-        public string FileLink { get; set; }
+        public string FileName { get; set; }
         public string FileHash { get; set; }
 
         public int DownloadCount { get; set; }
 
         public IList<PlayerRecord> Players { get; set; } = new List<PlayerRecord>();
-        public int PlayersCount { get; set; }
     }
 }

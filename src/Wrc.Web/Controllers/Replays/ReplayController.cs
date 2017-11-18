@@ -13,6 +13,7 @@ using Wrc.Web.Services.Replays;
 
 namespace Wrc.Web.Controllers.Replays
 {
+    [Route("api/[controller]")]
     public class ReplayController : Controller
     {
         private readonly IHostingEnvironment _env;
@@ -52,11 +53,11 @@ namespace Wrc.Web.Controllers.Replays
 
         [HttpGet]
         public async Task<IActionResult> ListAsync(
-            int startIndex,
-            int pageSize,
+            int start,
+            int limit,
             string searchText)
         {
-            var pagingInfo = new PagingInfo(startIndex, pageSize);
+            var pagingInfo = new PagingInfo(start, limit);
 
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
@@ -182,7 +183,7 @@ namespace Wrc.Web.Controllers.Replays
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
                 var replay = await unitOfWork.ReplayRepository.GetReplayAsync(replayId);
-                var path = GetReplayFilePath(replay.UploadedFile.DownloadLink);
+                var path = GetReplayFilePath(replay.UploadedFile.FileName);
 
                 await unitOfWork.ReplayRepository.IncrementDownloadCountAsync(replay.Id);
 

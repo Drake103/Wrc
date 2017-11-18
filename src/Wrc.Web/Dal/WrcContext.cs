@@ -44,6 +44,10 @@ namespace Wrc.Web.Dal
         {
             modelBuilder.Entity<PlayerRecord>().ToTable("player");
             modelBuilder.Entity<PlayerRecord>().HasKey(e => e.Id);
+
+            modelBuilder.Entity<PlayerRecord>()
+                .HasOne(p => p.ReplayRecord)
+                .WithMany(p => p.Players);
         }
 
         private static void MapReplayRecord(ModelBuilder modelBuilder)

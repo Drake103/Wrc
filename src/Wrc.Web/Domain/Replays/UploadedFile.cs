@@ -5,16 +5,16 @@ namespace Wrc.Web.Domain.Replays
     public class UploadedFile
     {
         public UploadedFile(
-            string downloadLink,
+            string fileName,
             string fileHash,
             DateTime uploadedAt)
         {
-            DownloadLink = downloadLink;
+            FileName = fileName;
             FileHash = fileHash;
             UploadedAt = uploadedAt;
         }
 
-        public string DownloadLink { get; }
+        public string FileName { get; }
 
         public string FileHash { get; }
 

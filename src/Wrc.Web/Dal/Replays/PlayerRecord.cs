@@ -3,7 +3,6 @@
     public class PlayerRecord
     {
         public int Id { get; set; }
-        public AccountRecord AccountRecord { get; set; }
         public double Elo { get; set; }
         public int Rank { get; set; }
         public int Level { get; set; }
@@ -18,8 +17,10 @@
         public bool IsEnteredInLobby { get; set; }
         public int ScoreLimit { get; set; }
         public int IncomeRate { get; set; }
-
         public int Number { get; set; }
+
+        public AccountRecord AccountRecord { get; set; }
+
         public ReplayRecord ReplayRecord { get; set; }
     }
 }

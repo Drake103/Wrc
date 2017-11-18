@@ -43,7 +43,7 @@ namespace Wrc.Web.Dal.Replays
                 replay.Id,
                 replay.Title,
                 gameInfoBuilder.Build(),
-                new UploadedFile(replay.FileLink, replay.FileHash, replay.UploadedAt),
+                new UploadedFile(replay.FileName, replay.FileHash, replay.UploadedAt),
                 replay.DownloadCount);
         }
 
