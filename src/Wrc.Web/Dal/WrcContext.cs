@@ -29,10 +29,24 @@ namespace Wrc.Web.Dal
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            MapReplayEntity(modelBuilder);
+            MapReplayRecord(modelBuilder);
+            MapPlayerRecord(modelBuilder);
+            MapAccountRecord(modelBuilder);
         }
 
-        private static void MapReplayEntity(ModelBuilder modelBuilder)
+        private void MapAccountRecord(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AccountRecord>().ToTable("account");
+            modelBuilder.Entity<AccountRecord>().HasKey(e => e.Id);
+        }
+
+        private void MapPlayerRecord(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PlayerRecord>().ToTable("player");
+            modelBuilder.Entity<PlayerRecord>().HasKey(e => e.Id);
+        }
+
+        private static void MapReplayRecord(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ReplayRecord>().ToTable("replay");
             modelBuilder.Entity<ReplayRecord>().HasKey(e => e.Id);

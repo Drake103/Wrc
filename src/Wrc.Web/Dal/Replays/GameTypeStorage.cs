@@ -12,7 +12,7 @@ namespace Wrc.Web.Dal.Replays
 
         private static IEnumerable<IGameType> CreateItems()
         {
-            yield return new GameType();
+            yield break;
         }
     }
 }

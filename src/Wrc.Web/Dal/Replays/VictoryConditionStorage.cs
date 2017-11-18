@@ -12,7 +12,7 @@ namespace Wrc.Web.Dal.Replays
 
         private static IEnumerable<IVictoryCondition> CreateItems()
         {
-            yield return new VictoryCondition();
+            yield break;
         }
     }
 }
