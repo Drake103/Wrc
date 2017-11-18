@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wrc.Web.Common;
 using Wrc.Web.Dal;
 using Wrc.Web.Dal.Replays;
 using Wrc.Web.Domain;
@@ -38,6 +39,8 @@ namespace Wrc.Web
             services.AddScoped<GameInfoBuilderFactory>();
             services.AddScoped<LightReplayProjectionToLightReplayTransformer>();
             services.AddScoped<ReplayRecordToReplayTransformer>();
+            services.AddScoped<IReplayRepositoryFactory, ReplayRepositoryFactory>();
+            services.AddScoped<ITimeService, TimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

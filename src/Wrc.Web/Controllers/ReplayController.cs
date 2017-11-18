@@ -11,9 +11,9 @@ using Wrc.Web.Dtos;
 using Wrc.Web.Models;
 using Wrc.Web.Services.Replays;
 
-namespace Wrc.Web.Controllers.Replays
+namespace Wrc.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/replays")]
     public class ReplayController : Controller
     {
         private readonly IHostingEnvironment _env;
@@ -30,7 +30,7 @@ namespace Wrc.Web.Controllers.Replays
             _env = env;
         }
 
-        [HttpGet]
+        [HttpGet("/{replayId}")]
         public async Task<IActionResult> DetailsAsync(int replayId)
         {
             if (replayId <= 0)
@@ -69,13 +69,13 @@ namespace Wrc.Web.Controllers.Replays
             }
         }
 
-        [HttpGet]
+        [HttpGet("/getByAccount/{playerId}")]
         public async Task<IActionResult> GetByPlayerUserAsync(
             int playerId,
-            int startIndex,
-            int pageSize)
+            int start,
+            int limit)
         {
-            var pagingInfo = new PagingInfo(startIndex, pageSize);
+            var pagingInfo = new PagingInfo(start, limit);
 
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
@@ -87,7 +87,7 @@ namespace Wrc.Web.Controllers.Replays
             }
         }
 
-        [HttpGet]
+        [HttpGet("/count")]
         public async Task<IActionResult> GetCountAsync(string searchText)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
