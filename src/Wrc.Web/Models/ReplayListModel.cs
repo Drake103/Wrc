@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using Wrc.Web.Dtos.Replays;
+using System.Linq;
+using Wrc.Web.Domain.Replays;
 
 namespace Wrc.Web.Models
 {
     public class ReplayListModel
     {
-        public ReplayListModel(IReadOnlyList<ReplayRowDto> replays)
+        public ReplayListModel(IReadOnlyList<LightReplay> replays)
         {
-            Replays = replays;
+            Replays = replays.Select(r => new ReplayRowModel(r)).ToList();
         }
 
-        public IReadOnlyList<ReplayRowDto> Replays { get; }
+        public IReadOnlyList<ReplayRowModel> Replays { get; }
     }
 }

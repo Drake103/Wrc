@@ -1,20 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Wrc.Web.Dal.Replays;
 using Wrc.Web.Domain;
 
 namespace Wrc.Web.Dal
 {
     public class WrcContextFactory : IUnitOfWorkFactory
     {
-        readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
+        private readonly IReplayRepositoryFactory _replayRepositoryFactory;
 
-        public WrcContextFactory(IConfiguration configuration)
+        public WrcContextFactory(
+            IConfiguration configuration,
+            IReplayRepositoryFactory replayRepositoryFactory)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
+            _replayRepositoryFactory = replayRepositoryFactory;
         }
 
         public IUnitOfWork Create()
         {
-            return new WrcContext(configuration);
+            return new WrcContext(_configuration, _replayRepositoryFactory);
         }
     }
 }

@@ -14,10 +14,7 @@ namespace Wrc.Web.Dal.Repositories
 
         public static DeckInfoDto GetDeckInfo(string deckContent)
         {
-            NameCodePair nationInfo;
-            NameCodePair specInfo;
-
-            GetNationAndSpecInfo(deckContent[0], deckContent[1], out nationInfo, out specInfo);
+            GetNationAndSpecInfo(deckContent[0], deckContent[1], out var nationInfo, out var specInfo);
 
             var deckInfo = new DeckInfoDto
             {

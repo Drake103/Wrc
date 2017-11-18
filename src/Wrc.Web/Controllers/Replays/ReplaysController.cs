@@ -1,26 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Wrc.Web.Domain;
 using Wrc.Web.Dtos;
-using Wrc.Web.Dtos.Replays;
 using Wrc.Web.Models;
 using Wrc.Web.Services.Replays;
 
 namespace Wrc.Web.Controllers.Replays
 {
-    [Route("api/replays")]
     public class ReplaysController : Controller
     {
         private readonly IReplayService _replayService;
-        private readonly IUnitOfWorkFactory _uowFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public ReplaysController(
-            IUnitOfWorkFactory uowFactory,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IReplayService replayService)
         {
-            _uowFactory = uowFactory;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _replayService = replayService;
         }
 
@@ -32,7 +29,7 @@ namespace Wrc.Web.Controllers.Replays
             /*if (replayId <= 0)
                 return NotFound();
 
-            var dto = _replayRepository.GetReplayCard(replayId);
+            var dto = _replayRepository.GetReplayAsync(replayId);
 
             if (dto == null)
                 return NotFound();
@@ -41,38 +38,41 @@ namespace Wrc.Web.Controllers.Replays
         }
 
         [HttpGet]
-        [Route("/replays/list")]
         public async Task<ReplayListModel> ListAsync(int startIndex, int pageSize, string searchText)
         {
             var pagingInfo = new PagingInfo(startIndex, pageSize);
 
-            using (var uow = _uowFactory.Create())
+            using (var unitOfWork = _unitOfWorkFactory.Create())
             {
-                var replays = await uow.ReplayRepository.ListAsync(pagingInfo, searchText);
+                var replays = await unitOfWork.ReplayRepository
+                    .ListAsync(pagingInfo, searchText)
+                    .ConfigureAwait(false);
 
                 return new ReplayListModel(replays);
             }
         }
 
-        //
-        // GET: /Replays/List
-        public ReplayListModel GetByPlayerUser(int playerId, int startIndex, int pageSize)
+        [HttpGet]
+        public async Task<ReplayListModel> GetByPlayerUserAsync(int playerId, int startIndex, int pageSize)
         {
             var pagingInfo = new PagingInfo(startIndex, pageSize);
 
-            using (var uow = _uowFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
-                var dtos = uow.ReplayRepository.GetByPlayerUser(playerId, pagingInfo);
-                return new ReplayListModel(dtos);
+                var replays = await uow.ReplayRepository
+                    .GetByAccountAsync(playerId, pagingInfo)
+                    .ConfigureAwait(false);
+
+                return new ReplayListModel(replays);
             }
         }
 
         [HttpGet]
-        public int GetCount(string searchText)
+        public async Task<int> GetCount(string searchText)
         {
-            using (var uow = _uowFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
-                return uow.ReplayRepository.GetTotalCount(searchText);
+                return await uow.ReplayRepository.GetTotalCountAsync(searchText);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Wrc.Web.Controllers.Replays
 
                 var randomFilename = Path.GetRandomFileName();
                 string title;
-                if (_replayService.IsAlreadyUploaded(file.InputStream, out title))
+                if (_replayService.IsAlreadyUploadedAsync(file.InputStream, out title))
                     return Json(new
                     {
                         success = false,
@@ -157,7 +157,7 @@ namespace Wrc.Web.Controllers.Replays
         {
             throw new NotImplementedException();
             /*var replay = _replayRepository.GetById(replayId);
-            var path = Path.Combine(Server.MapPath("~/App_Data/replays"), replay.Link);
+            var path = Path.Combine(Server.MapPath("~/App_Data/replays"), replay.DownloadLink);
 
             var fileBytes = System.IO.File.ReadAllBytes(path);
 

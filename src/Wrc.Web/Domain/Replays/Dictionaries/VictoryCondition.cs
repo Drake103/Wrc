@@ -1,6 +1,6 @@
 ﻿namespace Wrc.Web.Domain.Replays.Dictionaries
 {
-    public class VictoryCondition : GenericDictionaryItem
+    public class VictoryCondition : GenericDictionaryItem, IVictoryCondition
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Wrc.Web.Domain.Replays.Dictionaries
 {
-    public class GameMap : GenericDictionaryItem
+    public class GameMap : GenericDictionaryItem, IGameMap
     {
     }
 }

@@ -1,181 +1,125 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Wrc.Domain.Dtos;
-using Wrc.Domain.Dtos.Replays;
-using Wrc.Web.Dal.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Wrc.Web.Domain.Replays;
 using Wrc.Web.Dtos;
-using Wrc.Web.Dtos.Replays;
 
 namespace Wrc.Web.Dal.Replays
 {
     public class ReplayRepository : IReplayRepository
     {
-        private WrcContext _ctx;
+        private readonly LightReplayProjectionToLightReplayTransformer _lightReplayProjectionToLightReplayTransformer;
+        private readonly ReplayRecordToReplayTransformer _replayRecordToReplayTransformer;
+        private readonly WrcContext _wrcContext;
 
-        public ReplayRepository(WrcContext dbContext)
+        public ReplayRepository(
+            WrcContext wrcContext,
+            LightReplayProjectionToLightReplayTransformer lightReplayProjectionToLightReplayTransformer,
+            ReplayRecordToReplayTransformer replayRecordToReplayTransformer)
         {
-            _ctx = dbContext;
+            _wrcContext = wrcContext;
+            _lightReplayProjectionToLightReplayTransformer = lightReplayProjectionToLightReplayTransformer;
+            _replayRecordToReplayTransformer = replayRecordToReplayTransformer;
         }
 
-        public Task<IReadOnlyList<ReplayRowDto>> ListAsync(PagingInfo pagingInfo, string searchText)
+        public async Task<IReadOnlyList<LightReplay>> ListAsync(PagingInfo pagingInfo, string searchText)
         {
-            var query = _ctx.Replays;
+            IQueryable<ReplayRecord> query = _wrcContext.Replays;
 
-            var orderedQuery = FilterBySearchText(query, searchText).OrderByDescending(x => x.UploadDate);
+            query = FilterBySearchText(query, searchText).OrderByDescending(r => r.UploadedAt);
 
-            return FetchAsync(orderedQuery, pagingInfo);
+            query = query.Skip(pagingInfo.Start).Take(pagingInfo.Limit);
+
+            var lightReplayProjections = await ToLightReplayProjection(query).ToListAsync().ConfigureAwait(false);
+
+            return lightReplayProjections
+                .Select(_lightReplayProjectionToLightReplayTransformer.ToLightReplay)
+                .ToList();
         }
 
-        public IReadOnlyList<ReplayRowDto> GetByPlayerUser(int playerUserId, PagingInfo pagingInfo)
+        public async Task<IReadOnlyList<LightReplay>> GetByAccountAsync(int accountId, PagingInfo pagingInfo)
         {
-            throw new NotImplementedException();
-            /*var query = from replay in _crud.Get()
+            IQueryable<ReplayRecord> query = _wrcContext.Replays;
+
+            query = from replay in query
                 from player in replay.Players
-                where player.PlayerUser.Id == playerUserId
+                where player.AccountRecord.Id == accountId
                 select replay;
 
-            query = query.OrderByDescending(x => x.UploadDate);
+            query = query.OrderBy(r => r.UploadedAt);
 
-            return Fetch(query, pagingInfo);*/
+            query = query.Skip(pagingInfo.Start).Take(pagingInfo.Limit);
+
+            var lightReplayProjections = await ToLightReplayProjection(query).ToListAsync().ConfigureAwait(false);
+
+            return lightReplayProjections
+                .Select(_lightReplayProjectionToLightReplayTransformer.ToLightReplay)
+                .ToList();
         }
 
-        public ReplayCardDto GetReplayCard(int replayId)
+        public async Task<Replay> GetReplayAsync(int replayId)
+        {
+            var replay = await _wrcContext.FindAsync<ReplayRecord>(replayId);
+            if (replay == null)
+                return null;
+
+            foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
+                await navigationEntry.LoadAsync();
+
+            return _replayRecordToReplayTransformer.ToReplay(replay);
+        }
+
+        public Task<int> GetTotalCountAsync(string searchText)
+        {
+            var filteredQuery = FilterBySearchText(_wrcContext.Replays, searchText);
+            return filteredQuery.CountAsync();
+        }
+
+        public async Task<Replay> GetByFileHashAsync(string fileHash)
+        {
+            var replay = await _wrcContext.Replays.FirstOrDefaultAsync(x => x.FileHash == fileHash);
+
+            if (replay == null)
+                return null;
+
+            foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
+                await navigationEntry.LoadAsync();
+
+            return _replayRecordToReplayTransformer.ToReplay(replay);
+        }
+
+        public void Add(Replay replayRecord)
         {
             throw new NotImplementedException();
-            /*var query = from replay in _crud.Get()
-                where replay.Id == replayId
-                select replay;
+        }
 
-            var replayCardDto = query.Select(x => new ReplayCardDto
-            {
-                Id = x.Id,
-                UploadDate = x.UploadDate,
-                PlayersCount = x.Players.Count(),
-                MapName = x.GameMap.Name,
-                Title = x.Title,
-                VictoryConditionName = x.VictoryCondition.Name,
-                GameVersion = x.Version,
-                ScoreLimit = x.ScoreLimit,
-                DownloadsCounter = x.DownloadsCounter
-            }).SingleOrDefault();
-
-            if (replayCardDto == null)
-                throw new NotSupportedException("ReplayNotFound");
-
-            replayCardDto.Alliances = new List<AllianceDto>();
-
-            var alliancePlayers = (from replay in query
-                from p in replay.Players
-                select new PlayerDto
+        private static IQueryable<LightReplayProjection> ToLightReplayProjection(IQueryable<ReplayRecord> query)
+        {
+            return query.Select(
+                r => new LightReplayProjection
                 {
-                    Id = p.Id,
-                    PlayerUserId = p.PlayerUser.Id,
-                    PlayerElo = p.PlayerElo,
-                    PlayerRank = p.PlayerRank,
-                    PlayerLevel = p.PlayerLevel,
-                    PlayerName = p.PlayerName,
-                    PlayerTeamName = p.PlayerTeamName,
-                    PlayerAvatar = p.PlayerAvatar,
-                    PlayerIALevel = p.PlayerIALevel,
-                    PlayerReady = p.PlayerReady,
-                    PlayerDeckName = p.PlayerDeckName,
-                    PlayerDeckContent = p.PlayerDeckContent,
-                    PlayerAlliance = p.PlayerAlliance,
-                    PlayerIsEnteredInLobby = p.PlayerIsEnteredInLobby,
-                    PlayerScoreLimit = p.PlayerScoreLimit,
-                    PlayerIncomeRate = p.PlayerIncomeRate
-                }).ToList().GroupBy(x => x.PlayerAlliance);
-
-            foreach (var groupedByAlliance in alliancePlayers)
-            {
-                var players = groupedByAlliance.ToList();
-                players.ForEach(x =>
-                {
-                    x.PlayerElo = Math.Round(x.PlayerElo);
-                    x.DeckInfo = DeckContentHelper.GetDeckInfo(x.PlayerDeckContent);
-                }); // round ELO
-                replayCardDto.Alliances.Add(new AllianceDto(players));
-            }
-
-            return replayCardDto;*/
+                    Id = r.Id,
+                    UploadedAt = r.UploadedAt,
+                    PlayersCount = r.Players.Count,
+                    MapPublicCode = r.GameMapCode,
+                    Title = r.Title,
+                    VictoryConditionPublicCode = r.VictoryConditionCode,
+                    GameVersion = r.Version
+                });
         }
 
-        public int GetTotalCount(string searchText)
+        private static IQueryable<ReplayRecord> FilterBySearchText(IQueryable<ReplayRecord> query, string searchText)
         {
-            throw new NotImplementedException();
-            /*var query = _crud.Get();
-            query = FilterBySearchText(query, searchText);
-            return query.Count();*/
-        }
-
-        public bool IsAlreadyUploaded(Guid fileHash, out string title)
-        {
-            throw new NotImplementedException();
-            /*title = null;
-            var replay = _crud.Get().FirstOrDefault(x => x.FileHash == fileHash);
-            if (replay == null) return false;
-
-            title = replay.Title;
-            return true;*/
-        }
-
-        public void Add(Replay replay)
-        {
-            _ctx.Replays.Add(replay);
-        }
-
-        private static IQueryable<Replay> FilterBySearchText(IQueryable<Replay> query, string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText)) return query;
+            if (string.IsNullOrWhiteSpace(searchText))
+                return query;
 
             searchText = searchText.ToLowerInvariant();
 
-            return query.Where(x => x.GameMap.Name.ToLowerInvariant().Contains(searchText)
-                                    || x.ServerName.ToLowerInvariant().Contains(searchText)
-                                    || x.Title.ToLowerInvariant().Contains(searchText));
+            return query.Where(
+                x => x.ServerName.ToLowerInvariant().Contains(searchText)
+                     || x.Title.ToLowerInvariant().Contains(searchText));
         }
-
-        private static IList<ReplayRowDto> Fetch(IQueryable<Replay> query, PagingInfo pagingInfo)
-        {
-            var dtoQuery = query.Select(x => new ReplayRowDto
-            {
-                Id = x.Id,
-                UploadDate = x.UploadDate,
-                PlayersCount = x.Players.Count(),
-                MapName = x.GameMap.Name,
-                Title = x.Title,
-                VictoryConditionName = x.VictoryCondition.Name,
-                GameVersion = x.Version
-            });
-
-            if (pagingInfo == PagingInfo.All)
-                return dtoQuery.ToList();
-
-            return dtoQuery.Skip(pagingInfo.StartIndex).Take(pagingInfo.PageSize).ToList();
-        }
-
-        private static async Task<IReadOnlyList<ReplayRowDto>> FetchAsync(IQueryable<Replay> query, PagingInfo pagingInfo)
-        {
-            var dtoQuery = query.Select(x => new ReplayRowDto
-            {
-                Id = x.Id,
-                UploadDate = x.UploadDate,
-                PlayersCount = x.Players.Count(),
-                MapName = x.GameMap.Name,
-                Title = x.Title,
-                VictoryConditionName = x.VictoryCondition.Name,
-                GameVersion = x.Version
-            });
-
-            if (pagingInfo == PagingInfo.All)
-                return await dtoQuery.ToListAsync();
-
-            return await dtoQuery.Skip(pagingInfo.StartIndex).Take(pagingInfo.PageSize).ToListAsync();
-        }
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Wrc.Domain.Dtos.Replays
 {
@@ -9,9 +10,9 @@ namespace Wrc.Domain.Dtos.Replays
             Players = new List<PlayerDto>();
         }
 
-        public AllianceDto(IList<PlayerDto> players)
+        public AllianceDto(IEnumerable<PlayerDto> players)
         {
-            Players = players;
+            Players = players.ToList();
         }
 
         public IList<PlayerDto> Players { get; set; }

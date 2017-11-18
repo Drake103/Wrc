@@ -1,15 +1,14 @@
 ﻿namespace Wrc.Web.Domain.Replays.Dictionaries
 {
-    public class GameMode : IGameMode
+    public class UnknownGameMode : IGameMode
     {
-        public GameMode(string publicCode, string name)
+        public UnknownGameMode(string publicCode)
         {
             PublicCode = publicCode;
-            Name = name;
         }
 
         public string PublicCode { get; }
 
-        public string Name { get; }
+        public string Name => "Unknown Mode";
     }
 }

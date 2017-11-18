@@ -4,13 +4,13 @@
     {
         public const PagingInfo All = null;
 
-        public PagingInfo(int startIndex, int pageSize)
+        public PagingInfo(int start, int limit)
         {
-            PageSize = pageSize;
-            StartIndex = startIndex;
+            Limit = limit;
+            Start = start;
         }
 
-        public int StartIndex { get; }
-        public int PageSize { get; }
+        public int Start { get; }
+        public int Limit { get; }
     }
 }

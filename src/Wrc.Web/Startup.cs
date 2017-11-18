@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wrc.Web.Dal;
+using Wrc.Web.Dal.Replays;
 using Wrc.Web.Domain;
-using Wrc.Web.Services.Replays;
+using Wrc.Web.Domain.Replays;
+using Wrc.Web.Domain.Replays.Dictionaries;
 using Wrc.Web.Services.ReplayParsing;
-using Wrc.Web.Dal.Repositories;
+using Wrc.Web.Services.Replays;
 
 namespace Wrc.Web
 {
@@ -32,8 +30,14 @@ namespace Wrc.Web
             services.AddScoped<IUnitOfWorkFactory, WrcContextFactory>();
             services.AddScoped<IReplayService, ReplayService>();
             services.AddScoped<IReplayParser, ReplayParser>();
-            services.AddScoped<IReplayMapper, ReplayMapper>();
-            services.AddScoped<IPlayerUserRepository, PlayerUserRepository>();
+            services.AddScoped<IParsedReplayToGameInfoTransformer, ParsedReplayToGameInfoTransformer>();
+            services.AddScoped<IDictionaryItemStorage<IGameMode>, GameModeStorage>();
+            services.AddScoped<IDictionaryItemStorage<IGameMap>, GameMapStorage>();
+            services.AddScoped<IDictionaryItemStorage<IVictoryCondition>, VictoryConditionStorage>();
+            services.AddScoped<IDictionaryItemStorage<IGameType>, GameTypeStorage>();
+            services.AddScoped<GameInfoBuilderFactory>();
+            services.AddScoped<LightReplayProjectionToLightReplayTransformer>();
+            services.AddScoped<ReplayRecordToReplayTransformer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,12 +62,12 @@ namespace Wrc.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    "spa-fallback",
+                    new {controller = "Home", action = "Index"});
             });
         }
     }

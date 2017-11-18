@@ -1,14 +1,9 @@
-﻿using System;
-
-namespace Wrc.Web.Domain
+﻿namespace Wrc.Web.Domain
 {
-    public class GenericDictionaryItem : IEntity
+    public class GenericDictionaryItem : IEntity, IPublicCodeProvider
     {
-        public virtual int Id { get; set; }
-        public virtual string Name { get; set; }
-        public virtual string ResourceName { get; set; }
-        public virtual string PublicCode { get; set; }
-        public virtual DateTime DateStart { get; set; }
-        public virtual DateTime? DateEnd { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string PublicCode { get; set; }
     }
 }

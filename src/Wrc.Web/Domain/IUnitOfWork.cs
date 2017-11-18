@@ -7,8 +7,8 @@ namespace Wrc.Web.Domain
 {
     public interface IUnitOfWork : IDisposable
     {
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-        
         IReplayRepository ReplayRepository { get; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

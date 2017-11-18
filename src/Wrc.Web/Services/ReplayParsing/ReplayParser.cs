@@ -19,21 +19,19 @@ namespace Wrc.Web.Services.ReplayParsing
 
             var gameSection = replayObject.SelectToken("game").ToString();
 
-            ReplayParsedDto parsedReplayParsedDto = JsonConvert.DeserializeObject<ReplayParsedDto>(gameSection);
+            var parsedReplayParsedDto = JsonConvert.DeserializeObject<ReplayParsedDto>(gameSection);
 
             var properties = replayObject.Properties();
 
             foreach (var property in properties)
-            {
                 if (property.Name.Contains("player_"))
                 {
                     var playerSection = replayObject.SelectToken(property.Name).ToString();
-                    PlayerParsedDto parsedPlayerParsedDto = JsonConvert.DeserializeObject<PlayerParsedDto>(playerSection);
+                    var parsedPlayerParsedDto = JsonConvert.DeserializeObject<PlayerParsedDto>(playerSection);
                     parsedPlayerParsedDto.PlayerNumber = int.Parse(property.Name.Substring(7));
 
                     parsedReplayParsedDto.Players.Add(parsedPlayerParsedDto);
                 }
-            }
 
             return parsedReplayParsedDto;
         }
@@ -48,9 +46,9 @@ namespace Wrc.Web.Services.ReplayParsing
             {
                 var buffer = new char[searchStringLength];
 
-                int charsCount = 0;
+                var charsCount = 0;
 
-                bool jsonEndIsFound = false;
+                var jsonEndIsFound = false;
 
                 while (!streamReader.EndOfStream)
                 {
@@ -70,13 +68,11 @@ namespace Wrc.Web.Services.ReplayParsing
                 }
 
                 if (!jsonEndIsFound)
-                {
                     throw new NotSupportedException();
-                }
 
                 stream.Seek(JsonBegin, SeekOrigin.Begin);
 
-                var bytesLengths = (charsCount * 2);
+                var bytesLengths = charsCount * 2;
                 var jsonBytes = new byte[bytesLengths];
                 stream.Read(jsonBytes, 0, bytesLengths);
 

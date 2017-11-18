@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Wrc.Web.Common;
 using Wrc.Web.Domain;
 using Wrc.Web.Domain.Replays;
 using Wrc.Web.Services.ReplayParsing;
@@ -10,51 +11,63 @@ namespace Wrc.Web.Services.Replays
 {
     public class ReplayService : IReplayService
     {
+        private readonly IParsedReplayToGameInfoTransformer _parsedReplayToGameInfoTransformer;
         private readonly IReplayParser _parser;
-        private readonly IReplayMapper _mapper;
-        private readonly IUnitOfWorkFactory _uowFactory;
+        private readonly ITimeService _timeService;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public ReplayService(
             IReplayParser parser,
-            IReplayMapper mapper,
-            IUnitOfWorkFactory uowFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IParsedReplayToGameInfoTransformer parsedReplayToGameInfoTransformer,
+            ITimeService timeService)
         {
-            _uowFactory = uowFactory;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _parsedReplayToGameInfoTransformer = parsedReplayToGameInfoTransformer;
+            _timeService = timeService;
             _parser = parser;
-            _mapper = mapper;
         }
 
         public async Task<Replay> SaveReplayAsync(Stream replayFile, string filePath)
         {
-            using (var uow = _uowFactory.Create())
+            using (var unitOfWork = _unitOfWorkFactory.Create())
             {
                 var hash = ComputeFileHash(replayFile);
 
                 var parsedReplayDto = _parser.ParseFile(CopyStream(replayFile));
 
-                var replay = _mapper.GetEntity(parsedReplayDto);
+                var gameInfo = _parsedReplayToGameInfoTransformer.ToGameInfo(parsedReplayDto);
 
-                replay.Link = filePath;
-                replay.Title = "no title";
-                replay.UploadDate = DateTime.Now;
-                replay.FileHash = hash;
+                var replay = new Replay(
+                    0,
+                    "No Title",
+                    gameInfo,
+                    new UploadedFile(filePath, hash, _timeService.UtcNow));
 
-                uow.ReplayRepository.Add(replay);
+                unitOfWork.ReplayRepository.Add(replay);
 
-                await uow.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
                 return replay;
             }
         }
 
-        private Guid ComputeFileHash(Stream replayFile)
+        public async Task<Replay> IsAlreadyUploadedAsync(Stream replayFile)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.Create())
+            {
+                var hash = ComputeFileHash(replayFile);
+                return await unitOfWork.ReplayRepository.GetByFileHashAsync(hash);
+            }
+        }
+
+        private string ComputeFileHash(Stream replayFile)
         {
             var streamCopy = CopyStream(replayFile);
 
             using (var md5 = MD5.Create())
             {
-                var fileHash = md5.ComputeHash(streamCopy);
-                return new Guid(fileHash);
+                return Convert.ToBase64String(md5.ComputeHash(streamCopy));
             }
         }
 
@@ -63,21 +76,12 @@ namespace Wrc.Web.Services.Replays
             var startPosition = inputStream.Position;
 
             inputStream.Position = 0;
-            MemoryStream streamCopy = new MemoryStream();
+            var streamCopy = new MemoryStream();
             inputStream.CopyTo(streamCopy);
             inputStream.Position = startPosition;
 
             streamCopy.Position = 0;
             return streamCopy;
-        }
-
-        public bool IsAlreadyUploaded(Stream replayFile, out string title)
-        {
-            using (var unitOfWork = _uowFactory.Create())
-            {
-                var hash = ComputeFileHash(replayFile);
-                return unitOfWork.ReplayRepository.IsAlreadyUploaded(hash, out title);
-            }
         }
     }
 }
