@@ -99,7 +99,7 @@ namespace Wrc.Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("/upload")]
         public async Task<IActionResult> UploadAsync(IFormFile formFile)
         {
             if (formFile.Length == 0)
@@ -158,7 +158,7 @@ namespace Wrc.Web.Controllers
             return _env.WebRootPath + Path.DirectorySeparatorChar + fileName;
         }
 
-        [HttpPost]
+        [HttpPost("/{replayId}/setTitle")]
         public JsonResult SetTitle(int replayId, string token, string newTitle)
         {
             throw new NotImplementedException();
@@ -178,6 +178,7 @@ namespace Wrc.Web.Controllers
             return Json(new {success = true});*/
         }
 
+        [HttpGet("/{replayId}/download")]
         public async Task<IActionResult> GetReplayFileAsync(int replayId)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())

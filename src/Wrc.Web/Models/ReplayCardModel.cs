@@ -26,6 +26,6 @@ namespace Wrc.Web.Models
 
         public string GameVersion => _replay.GameInfo.Version;
 
-        public int DownloadsCounter => _replay.DownloadCount;
+        public int DownloadCount => _replay.DownloadCount;
     }
 }

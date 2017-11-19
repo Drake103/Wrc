@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import * as React from "react";
+import { NavLink, Link } from "react-router-dom";
 
 export class NavMenu extends React.Component<{}, {}> {
   render() {
@@ -13,23 +13,23 @@ export class NavMenu extends React.Component<{}, {}> {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link className="navbar-brand" to={ '/' }>SpaDemo</Link>
+            <Link className="navbar-brand" to={ "/" }>SpaDemo</Link>
           </div>
           <div className="is-clearfix"></div>
           <div className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
               <li>
-                <NavLink exact to={ '/' } activeClassName="active">
-                  <span className="glyphicon glyphicon-home"></span> Home
+                <NavLink exact to={ "/replays" } activeClassName="active">
+                  <span className="glyphicon glyphicon-home"></span> Replays
                 </NavLink>
               </li>
               <li>
-                <NavLink to={ '/counter' } activeClassName="active">
+                <NavLink to={ "/counter" } activeClassName="active">
                   <span className="glyphicon glyphicon-education"></span> Counter
                 </NavLink>
               </li>
               <li>
-                <NavLink to={ '/fetchdata' } activeClassName="active">
+                <NavLink to={ "/fetchdata" } activeClassName="active">
                   <span className="glyphicon glyphicon-th-list"></span> Fetch data
                 </NavLink>
               </li>

@@ -11,13 +11,16 @@ namespace Wrc.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((builderContext, config) =>
-                {
-                    config.AddJsonFile("config.json", optional: false, reloadOnChange: true);
-                })
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(
+                    (builderContext, config) =>
+                    {
+                        config.AddJsonFile("config.json", false, true);
+                    })
                 .UseStartup<Startup>()
                 .Build();
+        }
     }
 }

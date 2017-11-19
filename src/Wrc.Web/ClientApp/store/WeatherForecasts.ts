@@ -1,6 +1,6 @@
-import { fetch, addTask } from 'domain-task';
-import { Action, Reducer, ActionCreator } from 'redux';
-import { AppThunkAction } from './';
+import { fetch, addTask } from "domain-task";
+import { Action, Reducer, ActionCreator } from "redux";
+import { AppThunkAction } from "./";
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -23,12 +23,12 @@ export interface WeatherForecast {
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 
 interface RequestWeatherForecastsAction {
-    type: 'REQUEST_WEATHER_FORECASTS';
+    type: "REQUEST_WEATHER_FORECASTS";
     startDateIndex: number;
 }
 
 interface ReceiveWeatherForecastsAction {
-    type: 'RECEIVE_WEATHER_FORECASTS';
+    type: "RECEIVE_WEATHER_FORECASTS";
     startDateIndex: number;
     forecasts: WeatherForecast[];
 }
@@ -48,11 +48,11 @@ export const actionCreators = {
             let fetchTask = fetch(`api/SampleData/WeatherForecasts?startDateIndex=${ startDateIndex }`)
                 .then(response => response.json() as Promise<WeatherForecast[]>)
                 .then(data => {
-                    dispatch({ type: 'RECEIVE_WEATHER_FORECASTS', startDateIndex: startDateIndex, forecasts: data });
+                    dispatch({ type: "RECEIVE_WEATHER_FORECASTS", startDateIndex: startDateIndex, forecasts: data });
                 });
 
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-            dispatch({ type: 'REQUEST_WEATHER_FORECASTS', startDateIndex: startDateIndex });
+            dispatch({ type: "REQUEST_WEATHER_FORECASTS", startDateIndex: startDateIndex });
         }
     }
 };
@@ -65,13 +65,13 @@ const unloadedState: WeatherForecastsState = { forecasts: [], isLoading: false }
 export const reducer: Reducer<WeatherForecastsState> = (state: WeatherForecastsState, incomingAction: Action) => {
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'REQUEST_WEATHER_FORECASTS':
+        case "REQUEST_WEATHER_FORECASTS":
             return {
                 startDateIndex: action.startDateIndex,
                 forecasts: state.forecasts,
                 isLoading: true
             };
-        case 'RECEIVE_WEATHER_FORECASTS':
+        case "RECEIVE_WEATHER_FORECASTS":
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             if (action.startDateIndex === state.startDateIndex) {

@@ -13,7 +13,7 @@ namespace Wrc.Web.Domain.Replays
             IGameMap map,
             IVictoryCondition victoryCondition,
             string gameVersion,
-            int downloadsCounter)
+            int downloadCount)
         {
             Id = id;
             Title = title;
@@ -22,7 +22,7 @@ namespace Wrc.Web.Domain.Replays
             Map = map;
             VictoryCondition = victoryCondition;
             GameVersion = gameVersion;
-            DownloadsCounter = downloadsCounter;
+            DownloadCount = downloadCount;
         }
 
         public int Id { get; }
@@ -39,6 +39,6 @@ namespace Wrc.Web.Domain.Replays
 
         public string GameVersion { get; }
 
-        public int DownloadsCounter { get; }
+        public int DownloadCount { get; }
     }
 }
