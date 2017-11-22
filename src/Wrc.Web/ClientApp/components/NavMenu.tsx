@@ -1,41 +1,36 @@
 import * as React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export class NavMenu extends React.Component<{}, {}> {
-  render() {
-    return (
-      <div className="main-nav">
-        <div className="navbar navbar-inverse">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <Link className="navbar-brand" to={ "/" }>SpaDemo</Link>
-          </div>
-          <div className="is-clearfix"></div>
-          <div className="navbar-collapse collapse">
-            <ul className="nav navbar-nav">
-              <li>
-                <NavLink exact to={ "/replays" } activeClassName="active">
-                  <span className="glyphicon glyphicon-home"></span> Replays
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={ "/counter" } activeClassName="active">
-                  <span className="glyphicon glyphicon-education"></span> Counter
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={ "/fetchdata" } activeClassName="active">
-                  <span className="glyphicon glyphicon-th-list"></span> Fetch data
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>);
-  }
+    render() {
+        return (
+            <nav className="navbar is-white">
+                <div className="navbar-brand">
+                    <a className="navbar-item brand-text" href="../">
+                        Bulma Blog
+                    </a>
+                    <div className="navbar-burger burger" data-target="navMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div id="navMenu" className="navbar-menu">
+                    <div className="navbar-start">
+                        <NavLink exact to={"/replays"} activeClassName="active" className="navbar-item">
+                            <span className="glyphicon glyphicon-home"></span> Replays
+                        </NavLink>
+                        <NavLink to={"/counter"} activeClassName="active" className="navbar-item">
+                            <span className="glyphicon glyphicon-education"></span> Counter
+                        </NavLink>
+                        <NavLink to={"/fetchdata"} activeClassName="active" className="navbar-item">
+                            <span className="glyphicon glyphicon-th-list"></span> Fetch data
+                        </NavLink>
+                        <NavLink to={"/upload"} activeClassName="active" className="navbar-item">
+                            <span className="glyphicon glyphicon-th-list"></span> Upload
+                        </NavLink>
+                    </div>
+                </div>
+            </nav>);
+    }
 }
