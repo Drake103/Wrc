@@ -30,7 +30,7 @@ namespace Wrc.Web.Controllers
             _env = env;
         }
 
-        [HttpGet("/{replayId}")]
+        [HttpGet("{replayId}")]
         public async Task<IActionResult> DetailsAsync(int replayId)
         {
             if (replayId <= 0)
@@ -69,7 +69,7 @@ namespace Wrc.Web.Controllers
             }
         }
 
-        [HttpGet("/getByAccount/{playerId}")]
+        [HttpGet("getByAccount/{playerId}")]
         public async Task<IActionResult> GetByPlayerUserAsync(
             int playerId,
             int start,
@@ -87,7 +87,7 @@ namespace Wrc.Web.Controllers
             }
         }
 
-        [HttpGet("/count")]
+        [HttpGet("count")]
         public async Task<IActionResult> GetCountAsync(string searchText)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
@@ -99,7 +99,7 @@ namespace Wrc.Web.Controllers
             }
         }
 
-        [HttpPost("/upload")]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadAsync(IFormFile formFile)
         {
             if (formFile.Length == 0)
@@ -158,7 +158,7 @@ namespace Wrc.Web.Controllers
             return _env.WebRootPath + Path.DirectorySeparatorChar + fileName;
         }
 
-        [HttpPost("/{replayId}/setTitle")]
+        [HttpPost("{replayId}/setTitle")]
         public JsonResult SetTitle(int replayId, string token, string newTitle)
         {
             throw new NotImplementedException();
@@ -178,7 +178,7 @@ namespace Wrc.Web.Controllers
             return Json(new {success = true});*/
         }
 
-        [HttpGet("/{replayId}/download")]
+        [HttpGet("{replayId}/download")]
         public async Task<IActionResult> GetReplayFileAsync(int replayId)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
