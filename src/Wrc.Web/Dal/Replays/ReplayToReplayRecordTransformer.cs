@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Wrc.Web.Domain.Replays;
@@ -24,16 +23,7 @@ namespace Wrc.Web.Dal.Replays
 
             var gameInfo = replay.GameInfo;
 
-            var playerRecords = new List<PlayerRecord>();
-
-            foreach (var playerInfo in replay.GameInfo.Players)
-            {
-                var playerRecord = await ToPlayerRecordAsync(playerInfo).ConfigureAwait(false);
-
-                playerRecords.Add(playerRecord);
-            }
-
-            return new ReplayRecord
+            var replayRecord = new ReplayRecord
             {
                 Title = replay.Title,
 
@@ -56,8 +46,19 @@ namespace Wrc.Web.Dal.Replays
                 AllowObservers = gameInfo.AllowObservers,
                 Seed = gameInfo.Seed,
 
-                UploadedAt = replay.UploadedFile.UploadedAt
+                UploadedAt = replay.UploadedFile.UploadedAt,
+                FileHash = replay.UploadedFile.FileHash,
+                FileName = replay.UploadedFile.FileName
             };
+
+            foreach (var playerInfo in replay.GameInfo.Players)
+            {
+                var playerRecord = await ToPlayerRecordAsync(playerInfo).ConfigureAwait(false);
+
+                replayRecord.Players.Add(playerRecord);
+            }
+
+            return replayRecord;
         }
 
         private async Task<PlayerRecord> ToPlayerRecordAsync(PlayerInfo p)
