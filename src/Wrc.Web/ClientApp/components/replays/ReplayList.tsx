@@ -1,37 +1,57 @@
 import * as React from "react";
 
-import { ReplaysAppState, ReplayRowModel } from "../../store/Replays";
-import { ReplayRow } from "./ReplayRow";
+import * as ReplaysAppState from "../../store/Replays";
+import { ModalDialog } from "../ModalDialog";
 
-export class ReplayList extends React.Component<ReplaysAppState, {}> {
+type ReplayListProps = ReplaysAppState.ReplaysAppState // ... state we've requested from the Redux store
+    & typeof ReplaysAppState.actionCreators;
+
+export class ReplayList extends React.Component<ReplayListProps, {}> {
+    handleClick(replay: ReplaysAppState.ReplayRowModel) {
+        this.props.expandReplay(replay.id);
+    }
+
+    handleClose(replay: ReplaysAppState.ReplayRowModel) {
+        this.props.collapseReplay(replay.id);
+    }
+
     render() {
-        const replayRows = this.props.replays.map((r: ReplayRowModel) => <ReplayRow key={r.id} {...r} />);
-
-        return <table className='table'>
-            <thead>
-                <tr>
-                    <th>Upload date</th>
-                    <th>Title</th>
-                    <th className="centered">Players</th>
-                    <th>Map</th>
-                    <th className="centered">Game mode</th>
-                    <th>Version</th>
-                    <th className="centered">Download</th>
-                </tr>
-            </thead>
-            <tbody>
-                {this.props.replays.map(replay =>
-                    <tr key={replay.id}>
-                        <td>{replay.uploadedAt}</td>
-                        <td>{replay.title}</td>
-                        <td>{replay.playersCount}</td>
-                        <td>{replay.mapName}</td>
-                        <td>{replay.victoryConditionName}</td>
-                        <td>{replay.gameVersion}</td>
-                        <td>{replay.downloadCount}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+        return (
+            <div>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Upload date</th>
+                            <th>Title</th>
+                            <th className="">Players</th>
+                            <th>Map</th>
+                            <th className="">Game mode</th>
+                            <th>Version</th>
+                            <th className="">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.replays.map(replay =>
+                            <tr key={replay.id}>
+                                <td>
+                                    <button  onClick={(e: any) => this.handleClick(replay)}>Details</button>
+                                    <ModalDialog onClose={(e: any) => this.handleClose(replay)} show={replay.isExpanded}>
+                                        <h1>Dialog test</h1>
+                                    </ModalDialog>
+                                </td>
+                                <td>{replay.uploadedAt}</td>
+                                <td>{replay.title}</td>
+                                <td>{replay.playersCount}</td>
+                                <td>{replay.mapName}</td>
+                                <td>{replay.victoryConditionName}</td>
+                                <td>{replay.gameVersion}</td>
+                                <td>{replay.downloadCount}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 }

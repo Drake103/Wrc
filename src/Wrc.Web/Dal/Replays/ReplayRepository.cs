@@ -72,10 +72,7 @@ namespace Wrc.Web.Dal.Replays
                 return null;
             }
 
-            foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
-            {
-                await navigationEntry.LoadAsync().ConfigureAwait(false);
-            }
+            await LoadReplayNavigationsAsync(replay);
 
             return _replayRecordToReplayTransformer.ToReplay(replay);
         }
@@ -116,9 +113,25 @@ namespace Wrc.Web.Dal.Replays
         public async Task IncrementDownloadCountAsync(int replayId)
         {
             var replayRecord = await _wrcContext.Replays.FindAsync(replayId);
-            if (replayRecord!=null)
+            if (replayRecord != null)
             {
                 replayRecord.DownloadCount++;
+            }
+        }
+
+        private async Task LoadReplayNavigationsAsync(ReplayRecord replay)
+        {
+            foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
+            {
+                await navigationEntry.LoadAsync().ConfigureAwait(false);
+            }
+
+            foreach (var player in replay.Players)
+            {
+                foreach (var navigationEntry in _wrcContext.Entry(player).Navigations)
+                {
+                    await navigationEntry.LoadAsync().ConfigureAwait(false);
+                }
             }
         }
 

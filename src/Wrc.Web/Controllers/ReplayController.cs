@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Wrc.Web.Domain;
 using Wrc.Web.Dtos;
+using Wrc.Web.Filters;
 using Wrc.Web.Models;
+using Wrc.Web.Models.Api;
 using Wrc.Web.Services.Replays;
 
 namespace Wrc.Web.Controllers
@@ -51,21 +53,19 @@ namespace Wrc.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListAsync(
-            int start,
-            int limit,
-            string searchText)
+        [HttpGet("")]
+        [ApiValidationFilter]
+        public async Task<IActionResult> GetReplayListAsync(GetReplayListRequest request)
         {
-            var pagingInfo = new PagingInfo(start, limit);
+            var pagingInfo = request.ToPagingInfo();
 
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
                 var replays = await unitOfWork.ReplayRepository
-                    .ListAsync(pagingInfo, searchText)
+                    .ListAsync(pagingInfo, request.SearchText)
                     .ConfigureAwait(false);
 
-                return Ok(new ReplayListModel(replays));
+                return Ok(new ApiOkResponse(new ReplayListModel(replays)));
             }
         }
 
@@ -104,7 +104,7 @@ namespace Wrc.Web.Controllers
         {
             if (formFile.Length == 0)
             {
-                throw new ArgumentException("File is empty.");
+                return BadRequest(new ApiResponse(400, "File is empty."));
             }
 
             var randomFileName = Path.GetRandomFileName();
