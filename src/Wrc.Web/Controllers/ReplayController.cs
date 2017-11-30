@@ -49,7 +49,7 @@ namespace Wrc.Web.Controllers
                     return NotFound();
                 }
 
-                return Ok(new ReplayCardModel(replay));
+                return Ok(new ApiOkResponse(new ReplayCardModel(replay)));
             }
         }
 

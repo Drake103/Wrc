@@ -2,6 +2,7 @@ import * as React from "react";
 
 import * as ReplaysAppState from "../../store/Replays";
 import { ModalDialog } from "../ModalDialog";
+import { ReplayCard } from "./ReplayCard";
 
 type ReplayListProps = ReplaysAppState.ReplaysAppState // ... state we've requested from the Redux store
     & typeof ReplaysAppState.actionCreators;
@@ -35,9 +36,11 @@ export class ReplayList extends React.Component<ReplayListProps, {}> {
                         {this.props.replays.map(replay =>
                             <tr key={replay.id}>
                                 <td>
-                                    <button  onClick={(e: any) => this.handleClick(replay)}>Details</button>
-                                    <ModalDialog onClose={(e: any) => this.handleClose(replay)} show={replay.isExpanded}>
-                                        <h1>Dialog test</h1>
+                                    <button onClick={(e: any) => this.handleClick(replay)}>Details</button>
+                                    <ModalDialog title={replay.title}
+                                        onClose={(e: any) => this.handleClose(replay)}
+                                        show={replay.isExpanded}>
+                                        <ReplayCard replay={replay.details} />
                                     </ModalDialog>
                                 </td>
                                 <td>{replay.uploadedAt}</td>

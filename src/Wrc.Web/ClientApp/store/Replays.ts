@@ -34,6 +34,7 @@ export interface ReplayCardModel {
     victoryConditionName: string,
     gameVersion: number,
     downloadCount: number,
+    scoreLimit: number,
 }
 
 // -----------------
