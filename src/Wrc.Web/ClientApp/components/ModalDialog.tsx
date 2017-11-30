@@ -27,7 +27,7 @@ export class ModalDialog extends React.Component<ModalDialogProps, {}> {
                 <div className="modal-background" onClick={(e: any) => this.close(e)}></div>
                 <div className="modal-card">
                     <header className="modal-card-head">
-                        <p className="modal-card-title">{}</p>
+                        <p className="modal-card-title">{this.props.title}</p>
                         <button className="delete" aria-label="close" onClick={(e: any) => this.close(e)}></button>
                     </header>
                     <section className="modal-card-body">

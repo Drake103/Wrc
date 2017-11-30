@@ -7,7 +7,7 @@ export class NavMenu extends React.Component<{}, {}> {
             <nav className="navbar is-white">
                 <div className="navbar-brand">
                     <a className="navbar-item brand-text" href="../">
-                        Bulma Blog
+                        Wargame Replay Center
                     </a>
                     <div className="navbar-burger burger" data-target="navMenu">
                         <span></span>
@@ -18,16 +18,10 @@ export class NavMenu extends React.Component<{}, {}> {
                 <div id="navMenu" className="navbar-menu">
                     <div className="navbar-start">
                         <NavLink exact to={"/replays"} activeClassName="active" className="navbar-item">
-                            <span className="glyphicon glyphicon-home"></span> Replays
-                        </NavLink>
-                        <NavLink to={"/counter"} activeClassName="active" className="navbar-item">
-                            <span className="glyphicon glyphicon-education"></span> Counter
-                        </NavLink>
-                        <NavLink to={"/fetchdata"} activeClassName="active" className="navbar-item">
-                            <span className="glyphicon glyphicon-th-list"></span> Fetch data
+                            Replays
                         </NavLink>
                         <NavLink to={"/upload"} activeClassName="active" className="navbar-item">
-                            <span className="glyphicon glyphicon-th-list"></span> Upload
+                            Upload
                         </NavLink>
                     </div>
                 </div>

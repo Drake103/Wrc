@@ -118,7 +118,7 @@ namespace Wrc.Web.Controllers
 
                 if (replay != null)
                 {
-                    throw new Exception($"Replay is already uploaded with title - '{replay.Title}'.");
+                    return BadRequest(new ApiResponse(400, $"Replay is already uploaded with title: {replay.Title}"));
                 }
 
                 replay = await _replayService
