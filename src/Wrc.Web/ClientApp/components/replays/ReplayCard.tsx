@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import * as ReplaysAppState from "../../store/Replays";
+import { AllianceDetails } from "./AllianceDetails";
 
 interface ReplayCardProps {
     replay: ReplaysAppState.ReplayCardModel;
@@ -59,12 +60,10 @@ export class ReplayCard extends React.Component<ReplayCardProps, {}> {
 
                 <div className="columns">
                     <div className="column">
-                        <h2>BLUEFOR</h2>
-
+                        <AllianceDetails alliance={replay.alliances[0]} />
                     </div>
                     <div className="column">
-                        <h2>REDFOR</h2>
-
+                        <AllianceDetails alliance={replay.alliances[1]} />
                     </div>
                 </div>
             </div>

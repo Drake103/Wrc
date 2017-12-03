@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Wrc.Domain.Dtos.Replays;
+using Wrc.Web.Dtos.Replays;
 
-namespace Wrc.Web.Dal.Repositories
+namespace Wrc.Web.Models
 {
     internal class DeckContentHelper
     {
@@ -12,19 +12,17 @@ namespace Wrc.Web.Dal.Repositories
             return Alphabet.IndexOf(c);
         }
 
-        public static DeckInfoDto GetDeckInfo(string deckContent)
+        public static DeckModel GetDeckInfo(string deckName, string deckContent)
         {
             GetNationAndSpecInfo(deckContent[0], deckContent[1], out var nationInfo, out var specInfo);
 
-            var deckInfo = new DeckInfoDto
-            {
-                NationName = nationInfo.Name,
-                NationCode = nationInfo.Code,
-                SpecName = specInfo.Name,
-                SpecCode = specInfo.Code
-            };
-
-            return deckInfo;
+            return new DeckModel(
+                deckName,
+                deckContent,
+                nationInfo.Name,
+                nationInfo.Code,
+                specInfo.Name,
+                specInfo.Code);
         }
 
         private static NameCodePair GetSpecInfo(int specIndex)
@@ -199,6 +197,7 @@ namespace Wrc.Web.Dal.Repositories
             }
 
             if (nationChar == 't')
+            {
                 if (GetIndex(specChar) >= GetIndex('I') && GetIndex(specChar) <= GetIndex('P'))
                 {
                     nationInfo = new NameCodePair("Redfor", "redfor");
@@ -206,6 +205,7 @@ namespace Wrc.Web.Dal.Repositories
                     specInfo = GetSpecInfo(specIndex);
                     return true;
                 }
+            }
 
             return false;
         }

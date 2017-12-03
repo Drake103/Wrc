@@ -35,6 +35,30 @@ export interface ReplayCardModel {
     gameVersion: number,
     downloadCount: number,
     scoreLimit: number,
+    alliances: AllianceModel[],
+}
+
+export interface AllianceModel {
+    name: string,
+    players: PlayerModel[],
+}
+
+export interface DeckModel {
+    name: string,
+    content: string,
+    nationName: string,
+    nationCode: string,
+    specializationName: string,
+    specializationCode: string,
+}
+
+export interface PlayerModel {
+    id: number,
+    name: string,
+    level: number,
+    rank: number,
+    elo: number,
+    deck: DeckModel,
 }
 
 // -----------------

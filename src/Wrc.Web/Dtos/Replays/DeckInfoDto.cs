@@ -1,4 +1,4 @@
-﻿namespace Wrc.Domain.Dtos.Replays
+﻿namespace Wrc.Web.Dtos.Replays
 {
     public class DeckInfoDto
     {

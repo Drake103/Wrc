@@ -1,4 +1,6 @@
-﻿namespace Wrc.Domain.Dtos.Replays
+﻿using Wrc.Web.Dtos.Replays;
+
+namespace Wrc.Domain.Dtos.Replays
 {
     public class PlayerDto : BaseDto
     {
