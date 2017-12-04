@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Wrc.Web.Domain.Replays;
 
 namespace Wrc.Web.Models
@@ -16,7 +14,9 @@ namespace Wrc.Web.Models
             string victoryConditionName,
             string gameVersion,
             int downloadCount,
-            IEnumerable<AllianceModel> allianceModels)
+            int scoreLimit,
+            BlueforModel bluefor,
+            RedforModel redfor)
         {
             Id = id;
             UploadedAt = uploadedAt;
@@ -26,8 +26,9 @@ namespace Wrc.Web.Models
             VictoryConditionName = victoryConditionName;
             GameVersion = gameVersion;
             DownloadCount = downloadCount;
-
-            Alliances = allianceModels.ToArray();
+            ScoreLimit = scoreLimit;
+            Bluefor = bluefor;
+            Redfor = redfor;
         }
 
         public int Id { get; }
@@ -46,14 +47,14 @@ namespace Wrc.Web.Models
 
         public int DownloadCount { get; }
 
-        public IReadOnlyList<AllianceModel> Alliances { get; }
+        public int ScoreLimit { get; }
+
+        public BlueforModel Bluefor { get; }
+
+        public RedforModel Redfor { get; }
 
         public static ReplayCardModel FromReplay(Replay replay)
         {
-            var alliances = replay.GameInfo.Players
-                .GroupBy(p => p.Alliance)
-                .Select(g => new AllianceModel(g.Key, g.Select(PlayerModel.CreateFrom)));
-
             return new ReplayCardModel(
                 replay.Id,
                 replay.UploadedFile.UploadedAt,
@@ -63,7 +64,9 @@ namespace Wrc.Web.Models
                 replay.GameInfo.VictoryCondition.Name,
                 replay.GameInfo.Version,
                 replay.DownloadCount,
-                alliances);
+                replay.GameInfo.ScoreLimit,
+                BlueforModel.CreateFrom(replay.GameInfo.Players),
+                RedforModel.CreateFrom(replay.GameInfo.Players));
         }
     }
 }

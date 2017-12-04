@@ -35,7 +35,8 @@ export interface ReplayCardModel {
     gameVersion: number,
     downloadCount: number,
     scoreLimit: number,
-    alliances: AllianceModel[],
+    bluefor: AllianceModel,
+    redfor: AllianceModel,
 }
 
 export interface AllianceModel {

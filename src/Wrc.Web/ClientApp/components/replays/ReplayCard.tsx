@@ -60,10 +60,10 @@ export class ReplayCard extends React.Component<ReplayCardProps, {}> {
 
                 <div className="columns">
                     <div className="column">
-                        <AllianceDetails alliance={replay.alliances[0]} />
+                        <AllianceDetails alliance={replay.bluefor} />
                     </div>
                     <div className="column">
-                        <AllianceDetails alliance={replay.alliances[1]} />
+                        <AllianceDetails alliance={replay.redfor} />
                     </div>
                 </div>
             </div>

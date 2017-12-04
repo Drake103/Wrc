@@ -1,34 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Wrc.Web.Domain.Replays;
 
 namespace Wrc.Web.Models
 {
-    public class AllianceModel
+    public abstract class AllianceModel
     {
-        public AllianceModel(int allianceId, IEnumerable<PlayerModel> players)
+        protected AllianceModel(IEnumerable<PlayerModel> players)
         {
-            AllianceId = allianceId;
-            AllianceName = GetAllianceName(allianceId);
             Players = players.ToArray();
         }
 
-        public string AllianceName { get; }
+        public abstract string AllianceName { get; }
 
-        public int AllianceId { get; }
+        public abstract int AllianceId { get; }
 
         public IReadOnlyList<PlayerModel> Players { get; }
-
-        private string GetAllianceName(int alliance)
-        {
-            switch (alliance)
-            {
-                case 0:
-                    return "BLUEFOR";
-                case 1:
-                    return "REDFOR";
-                default:
-                    return "UNKNOWN";
-            }
-        }
     }
 }
