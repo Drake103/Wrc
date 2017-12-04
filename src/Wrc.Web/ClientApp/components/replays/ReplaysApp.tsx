@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { ReplayList } from "./ReplayList";
 import * as ReplaysAppState from "../../store/Replays";
 import { ApplicationState } from "../../store/index";
+import { Pagination } from "../Pagination";
 
 // At runtime, Redux will merge together...
 type ReplaysAppProps =
@@ -35,6 +36,7 @@ class ReplaysApp extends React.Component<ReplaysAppProps, {}> {
         return (
             <div>
                 <ReplayList {...this.props} />
+                <Pagination />
             </div>
         );
     }

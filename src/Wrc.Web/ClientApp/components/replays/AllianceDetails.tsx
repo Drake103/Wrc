@@ -13,7 +13,7 @@ export class AllianceDetails extends React.Component<AllianceDetailsProps, {}> {
         return (
             <div>
                 <h2>{alliance.name}</h2>
-                <table className="table">
+                <table className="table is-narrow">
                     <thead>
                         <tr>
                             <th className="faction-col"></th>
@@ -35,7 +35,7 @@ export class AllianceDetails extends React.Component<AllianceDetailsProps, {}> {
                                 <td>{p.level}</td>
                                 <td>{p.rank}</td>
                                 <td>{p.elo}</td>
-                                <td><button>Deck</button></td>
+                                <td><button className="button is-small">Deck</button></td>
                             </tr>
                         )}
                     </tbody>

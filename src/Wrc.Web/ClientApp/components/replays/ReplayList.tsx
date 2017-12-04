@@ -36,7 +36,7 @@ export class ReplayList extends React.Component<ReplayListProps, {}> {
                         {this.props.replays.map(replay =>
                             <tr key={replay.id}>
                                 <td>
-                                    <button onClick={(e: any) => this.handleClick(replay)}>Details</button>
+                                    <button className="button is-small" onClick={(e: any) => this.handleClick(replay)}>Details</button>
                                     <ModalDialog title={replay.title}
                                         onClose={(e: any) => this.handleClose(replay)}
                                         show={replay.isExpanded}>
