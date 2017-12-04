@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Wrc.Web.Domain.Replays;
 
 namespace Wrc.Web.Models
 {
@@ -11,9 +10,9 @@ namespace Wrc.Web.Models
             Players = players.ToArray();
         }
 
-        public abstract string AllianceName { get; }
+        public abstract int Id { get; }
 
-        public abstract int AllianceId { get; }
+        public abstract string Name { get; }
 
         public IReadOnlyList<PlayerModel> Players { get; }
     }

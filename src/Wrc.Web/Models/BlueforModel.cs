@@ -12,9 +12,9 @@ namespace Wrc.Web.Models
         {
         }
 
-        public override string AllianceName => "BLUEFOR";
+        public override int Id => BlueforId;
 
-        public override int AllianceId => BlueforId;
+        public override string Name => "BLUEFOR";
 
         public static BlueforModel CreateFrom(IEnumerable<PlayerInfo> playerInfos)
         {

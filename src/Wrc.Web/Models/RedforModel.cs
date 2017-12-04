@@ -12,14 +12,9 @@ namespace Wrc.Web.Models
         {
         }
 
-        public override string AllianceName => "REDFOR";
+        public override int Id => RedforId;
 
-        public override int AllianceId => RedforId;
-
-        public static bool IsRedfor(PlayerInfo playerInfo)
-        {
-            return playerInfo.Alliance == RedforId;
-        }
+        public override string Name => "REDFOR";
 
         public static RedforModel CreateFrom(IEnumerable<PlayerInfo> playerInfos)
         {
