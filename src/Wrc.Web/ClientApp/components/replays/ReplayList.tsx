@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FormattedDate } from "react-intl";
 
 import * as ReplaysAppState from "../../store/Replays";
 import { ModalDialog } from "../ModalDialog";
@@ -43,7 +44,7 @@ export class ReplayList extends React.Component<ReplayListProps, {}> {
                                         <ReplayCard replay={replay.details} />
                                     </ModalDialog>
                                 </td>
-                                <td>{replay.uploadedAt}</td>
+                                <td><FormattedDate value={replay.uploadedAt} /></td>
                                 <td>{replay.title}</td>
                                 <td>{replay.playersCount}</td>
                                 <td>{replay.mapName}</td>

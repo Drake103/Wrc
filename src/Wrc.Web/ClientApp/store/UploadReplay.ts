@@ -31,13 +31,13 @@ type KnownAction = BeginUploadAction | UploadSuccessAction;
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    beginUpload: (fileList: FileList): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    beginUpload: (files: File[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
 
         const state = getState();
 
         const data = new FormData();
-        data.append('formFile', fileList[0]);
+        data.append('formFile', files[0]);
         axios.post('/api/replays/upload', data).then((response) => {
             console.log(response);
         });

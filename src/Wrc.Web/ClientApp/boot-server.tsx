@@ -7,6 +7,7 @@ import { createMemoryHistory } from "history";
 import { createServerRenderer, RenderResult } from "aspnet-prerendering";
 import { routes } from "./routes";
 import configureStore from "./configureStore";
+import { IntlProvider } from "react-intl";
 
 export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
@@ -17,13 +18,17 @@ export default createServerRenderer(params => {
         const store = configureStore(createMemoryHistory());
         store.dispatch(replace(urlAfterBasename));
 
+        const locale = "en";
+
         // Prepare an instance of the application and perform an inital render that will
         // cause any async tasks (e.g., data access) to begin
         const routerContext: any = {};
         const app = (
-            <Provider store={ store }>
-                <StaticRouter basename={ basename } context={ routerContext } location={ params.location.path } children={ routes } />
-            </Provider>
+            <IntlProvider locale={locale}>
+                <Provider store={store}>
+                    <StaticRouter basename={basename} context={routerContext} location={params.location.path} children={routes} />
+                </Provider>
+            </IntlProvider>
         );
         renderToString(app);
 
@@ -32,7 +37,7 @@ export default createServerRenderer(params => {
             resolve({ redirectUrl: routerContext.url });
             return;
         }
-        
+
         // Once any async tasks are done, we can perform the final render
         // We also send the redux store state, so the client can continue execution where the server left off
         params.domainTasks.then(() => {

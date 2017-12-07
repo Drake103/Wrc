@@ -12,7 +12,7 @@ export class AllianceDetails extends React.Component<AllianceDetailsProps, {}> {
 
         return (
             <div>
-                <h2>{alliance.name}</h2>
+                <h3>{alliance.name}</h3>
                 <table className="table is-narrow">
                     <thead>
                         <tr>

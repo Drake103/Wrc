@@ -93,10 +93,7 @@ namespace Wrc.Web.Dal.Replays
                 return null;
             }
 
-            foreach (var navigationEntry in _wrcContext.Entry(replay).Navigations)
-            {
-                await navigationEntry.LoadAsync().ConfigureAwait(false);
-            }
+            await LoadReplayNavigationsAsync(replay).ConfigureAwait(false);
 
             return _replayRecordToReplayTransformer.ToReplay(replay);
         }

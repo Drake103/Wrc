@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FormattedDate, FormattedTime } from "react-intl";
 
 import * as ReplaysAppState from "../../store/Replays";
 import { AllianceDetails } from "./AllianceDetails";
@@ -51,7 +52,9 @@ export class ReplayCard extends React.Component<ReplayCardProps, {}> {
                                 </tr>
                                 <tr>
                                     <th>Uploaded</th>
-                                    <td>{replay.uploadedAt}</td>
+                                    <td>
+                                        <FormattedDate value={replay.uploadedAt} /> <FormattedTime value={replay.uploadedAt} />
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
