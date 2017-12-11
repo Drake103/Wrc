@@ -13,7 +13,11 @@ type ReplaysAppProps =
     & typeof ReplaysAppState.actionCreators // ... plus action creators we've requested
     & RouteComponentProps<{ page: string }>; // ... plus incoming routing parameters
 
-class ReplaysApp extends React.Component<ReplaysAppProps, {}> {
+class ReplaysAppComponent extends React.Component<ReplaysAppProps, {}> {
+
+    constructor(props: any) {
+        super(props);
+    }
 
     componentWillMount() {
         // This method runs when the component is first added to the page
@@ -42,7 +46,7 @@ class ReplaysApp extends React.Component<ReplaysAppProps, {}> {
     }
 }
 
-export default connect(
+export const ReplaysApp = connect(
     (state: ApplicationState) => state.replays, // Selects which state properties are merged into the component's props
     ReplaysAppState.actionCreators // Selects which action creators are merged into the component's props
-)(ReplaysApp) as typeof ReplaysApp;
+)(ReplaysAppComponent);

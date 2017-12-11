@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ApplicationState }  from '../store';
+import { ApplicationState } from '../store';
 import * as WeatherForecastsState from '../store/WeatherForecasts';
 
 // At runtime, Redux will merge together...
@@ -10,7 +10,12 @@ type WeatherForecastProps =
     & typeof WeatherForecastsState.actionCreators      // ... plus action creators we've requested
     & RouteComponentProps<{ startDateIndex: string }>; // ... plus incoming routing parameters
 
-class FetchData extends React.Component<WeatherForecastProps, {}> {
+class FetchDataComponent extends React.Component<WeatherForecastProps, {}> {
+
+    constructor(props: any) {
+        super(props);
+    }
+
     componentWillMount() {
         // This method runs when the component is first added to the page
         let startDateIndex = parseInt(this.props.match.params.startDateIndex) || 0;
@@ -27,8 +32,8 @@ class FetchData extends React.Component<WeatherForecastProps, {}> {
         return <div>
             <h1>Weather forecast</h1>
             <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
-            { this.renderForecastsTable() }
-            { this.renderPagination() }
+            {this.renderForecastsTable()}
+            {this.renderPagination()}
         </div>;
     }
 
@@ -43,14 +48,14 @@ class FetchData extends React.Component<WeatherForecastProps, {}> {
                 </tr>
             </thead>
             <tbody>
-            {this.props.forecasts.map(forecast =>
-                <tr key={ forecast.dateFormatted }>
-                    <td>{ forecast.dateFormatted }</td>
-                    <td>{ forecast.temperatureC }</td>
-                    <td>{ forecast.temperatureF }</td>
-                    <td>{ forecast.summary }</td>
-                </tr>
-            )}
+                {this.props.forecasts.map(forecast =>
+                    <tr key={forecast.dateFormatted}>
+                        <td>{forecast.dateFormatted}</td>
+                        <td>{forecast.temperatureC}</td>
+                        <td>{forecast.temperatureF}</td>
+                        <td>{forecast.summary}</td>
+                    </tr>
+                )}
             </tbody>
         </table>;
     }
@@ -60,14 +65,14 @@ class FetchData extends React.Component<WeatherForecastProps, {}> {
         let nextStartDateIndex = (this.props.startDateIndex || 0) + 5;
 
         return <p className='clearfix text-center'>
-            <Link className='btn btn-default pull-left' to={ `/fetchdata/${ prevStartDateIndex }` }>Previous</Link>
-            <Link className='btn btn-default pull-right' to={ `/fetchdata/${ nextStartDateIndex }` }>Next</Link>
-            { this.props.isLoading ? <span>Loading...</span> : [] }
+            <Link className='btn btn-default pull-left' to={`/fetchdata/${prevStartDateIndex}`}>Previous</Link>
+            <Link className='btn btn-default pull-right' to={`/fetchdata/${nextStartDateIndex}`}>Next</Link>
+            {this.props.isLoading ? <span>Loading...</span> : []}
         </p>;
     }
 }
 
-export default connect(
+export const FetchData = connect(
     (state: ApplicationState) => state.weatherForecasts, // Selects which state properties are merged into the component's props
     WeatherForecastsState.actionCreators                 // Selects which action creators are merged into the component's props
-)(FetchData) as typeof FetchData;
+)(FetchDataComponent);
